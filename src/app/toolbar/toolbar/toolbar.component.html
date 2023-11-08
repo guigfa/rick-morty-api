@@ -1,0 +1,26 @@
+<mat-toolbar color="primary"  class="text-center d-flex justify-content-between align-items-center">
+    <h2 (click)="redirectTo('')" style="cursor: pointer;">Rick & Morty API Test</h2>
+    <input>
+    <button mat-button [matMenuTriggerFor]="menu" class="p-0"><mat-icon>person</mat-icon></button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="redirectTo('personagens')">Item 1</button>
+  <button mat-menu-item (click)="redirectTo('episodios')">Item 2</button>
+</mat-menu>
+</mat-toolbar>
+<!-- 
+<mat-drawer-container class="col-3 col-sm-6 col-md-2 h-100 w-10" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <button (click)="drawer.toggle()" mat-raised-button>
+        Close
+      </button>
+      <p>Auto-resizing sidenav</p>
+      <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
+    </mat-drawer>
+  
+    <div class="w-10">
+      <button type="button" mat-button (click)="drawer.toggle()">
+        Toggle sidenav
+      </button>
+    </div>
+  
+  </mat-drawer-container> -->

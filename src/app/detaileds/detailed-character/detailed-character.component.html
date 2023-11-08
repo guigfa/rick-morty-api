@@ -1,0 +1,11 @@
+<div class="container d-flex align-items-center justify-content-center flex-column">
+    <h1>Nome:</h1>
+    <h1 (click)="a(character)">{{ character?.name }}</h1>
+
+    <img [src]="character?.image" class="rounded-circle mb-20">
+    <h2>Episódios:</h2>
+    <ng-container *ngFor="let episode of episodes">
+        {{ episode.name }}
+        <br>
+    </ng-container>
+</div>

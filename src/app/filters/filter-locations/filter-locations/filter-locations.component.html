@@ -1,0 +1,33 @@
+<div class="container">
+    <form class="example-section" [formGroup]="form">
+        <mat-radio-group aria-label="Select an option" formControlName="name">
+            <mat-radio-button value="Rick">Rick</mat-radio-button>
+            <mat-radio-button value="Morty">Morty</mat-radio-button>
+          </mat-radio-group>
+
+          <mat-radio-group aria-label="Select an option" formControlName="type">
+            <mat-radio-button value="female">Female</mat-radio-button>
+            <mat-radio-button value="male">Male</mat-radio-button>
+            <mat-radio-button value="genderless">Genderless</mat-radio-button>
+            <mat-radio-button value="unknown">unknown</mat-radio-button>
+
+          </mat-radio-group>
+    </form>
+    <div class="w-100 row">
+      <ng-container *ngFor="let location of locations">
+        <mat-card class=" col-6 col-sm-6 col-md-6 h-25 col-sm">
+          <div class="d-flex gap-12">
+            <img class="image" [src]="location.image">
+            <div class="d-flex flex-column">
+              <h3>{{ location.name }}</h3>
+              <h3>{{ location.dimension }}</h3>
+              <h3>{{ location.type }}</h3>
+            </div>
+          </div>
+        </mat-card>
+      </ng-container>
+      <ng-container *ngIf="error">
+        Não foi encontrada nenhuma localização com essas características!
+      </ng-container>
+    </div>
+</div>
