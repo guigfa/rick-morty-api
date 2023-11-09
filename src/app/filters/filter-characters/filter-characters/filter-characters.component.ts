@@ -6,6 +6,7 @@ import { Return } from 'src/shared/models/API-return.model';
 import { Character } from 'src/shared/models/Character.model';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
 import { Gender } from 'src/shared/enums/genders.enum';
+import { FilterService } from 'src/shared/services/filter.service';
 
 @Component({
   selector: 'app-filter-characters',
@@ -26,6 +27,7 @@ export class FilterCharactersComponent implements OnInit {
     species: new FormControl(null),
     type: new FormControl(null),
   })
+  filterValue: string;
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -45,13 +47,22 @@ export class FilterCharactersComponent implements OnInit {
 
   constructor(
     private rickMortyService: RickMortyService,
-    private router: Router
+    private router: Router,
+    private filterService: FilterService
   ) {}
 
   ngOnInit(): void {
-    this.getInitialCharacters();
-    this.filterCharactersByForm();
-    this.form.valueChanges.subscribe(v => console.log(v))
+    this.filterService.getToolbarValue()
+      .subscribe((value) => this.filterValue = value);
+      if(this.filterValue) {
+        this.form.get('name').setValue(this.filterValue);
+        this.filter(this.form.value);
+      } else {
+        this.getInitialCharacters();
+        this.filterCharactersByForm();
+      }
+      
+    this.filterService.sendData('Personagens');
   }
 
   getInitialCharacters() {
@@ -102,7 +113,7 @@ export class FilterCharactersComponent implements OnInit {
       this.characters.push(...data.results);
       this.nextPage = data.info.next;
       if (!data.info.next) {
-        console.log('Todos os resultados casdasdoletados:', this.characters);
+        return;
       }
     });
   };
@@ -119,12 +130,10 @@ export class FilterCharactersComponent implements OnInit {
     this.favoritedChars = this.favoritedChars.filter(character => {
       character.id !== id
     });
-    console.log(this.favoritedChars)
   }
 
   redirectToCharacter(id: number) {
     this.router.navigate([`/personagem/${id}`]);
-    console.log(id);
   }
 
   get GenderEnum() {

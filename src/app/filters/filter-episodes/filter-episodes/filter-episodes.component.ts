@@ -1,8 +1,10 @@
 import { Component, HostListener } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EMPTY, catchError } from 'rxjs';
 import { Return } from 'src/shared/models/API-return.model';
 import { Episode } from 'src/shared/models/Episode.model';
+import { FilterService } from 'src/shared/services/filter.service';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
 
 @Component({
@@ -38,13 +40,15 @@ export class FilterEpisodesComponent {
 
   constructor(
     private rickMortyService: RickMortyService,
+    private filterService: FilterService,
+    private router: Router
     
   ) {}
 
   ngOnInit(): void {
+    this.filterService.sendData('Episódios');
     this.getInitialCharacters();
     this.filterEpisodesByForm();
-    this.form.valueChanges.subscribe(v => console.log(v))
   }
 
   getInitialCharacters() {
@@ -90,9 +94,13 @@ export class FilterEpisodesComponent {
       this.episodes.push(...data.results);
       this.nextPage = data.info.next;
       if (!data.info.next) {
-        console.log('Todos os resultados coletados:', this.episodes);
+        return
       }
     });
+  }
+
+  redirectToEpisode(id: number) {
+    this.router.navigate([`episodio/${id}`])
   }
 
 }

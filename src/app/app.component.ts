@@ -42,8 +42,7 @@ export class AppComponent implements OnInit {
         if (data.info.next) {
           this.fetchPages(data.info.next);
         } else {
-          // Todas as páginas foram coletadas
-          console.log('Todos os resultados coletados:', this.test);
+          return;
         }
       });
     }

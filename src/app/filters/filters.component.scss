@@ -1,0 +1,14 @@
+.card {
+    max-height: 450px;
+}
+
+.scroll {
+    overflow-y: auto;
+}
+
+@media (max-width: 690px) {
+    .main {
+        display: flex;
+        flex-direction: column;
+    }
+}

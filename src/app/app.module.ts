@@ -7,13 +7,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/shared/material.module';
 import { FiltersComponent } from './filters/filters.component';
 import { FilterCharactersComponent } from './filters/filter-characters/filter-characters/filter-characters.component';
-import { MainPageComponent } from './main-page/main-page/main-page.component';
+import { MainPageComponent } from './main-page/main-page.component';
 import { ToolbarComponent } from './toolbar/toolbar/toolbar.component';
 import { FilterEpisodesComponent } from './filters/filter-episodes/filter-episodes/filter-episodes.component';
 import { FilterLocationsComponent } from './filters/filter-locations/filter-locations/filter-locations.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DetailedCharacterComponent } from './detaileds/detailed-character/detailed-character.component';
+import { DetailedEpisodeComponent } from './detaileds/detailed-episode/detailed-episode.component';
+import { DetailedLocationComponent } from './detaileds/detailed-location/detailed-location.component';
+import { QuizComponent } from './quiz/quiz.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { DetailedCharacterComponent } from './detaileds/detailed-character/detai
     ToolbarComponent,
     FilterEpisodesComponent,
     FilterLocationsComponent,
-    DetailedCharacterComponent
+    DetailedCharacterComponent,
+    DetailedEpisodeComponent,
+    DetailedLocationComponent,
+    QuizComponent
   ],
   imports: [
     BrowserModule,

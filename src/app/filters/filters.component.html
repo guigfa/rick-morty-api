@@ -1,1 +1,78 @@
-<p>filters works!</p>
+<div class="container d-flex w-100 justify-content-center align-items-center flex-column gap-3 mt-5">
+    <h1 class="d-flex align-items-center gap-2" >Clique no botão <mat-icon class="h-10">add_circle_outline</mat-icon> para a listagem completa! </h1>
+    <div class="d-flex gap-3 justify-content-between w-100 main">
+        <mat-card class="col-sm-4 text-center p-2 card ">
+            <div class="d-flex justify-content-between align-items-center">
+              <h1>Personagens</h1>
+              <mat-icon class="h-10" (click)="redirectTo('personagens')">add_circle_outline</mat-icon>
+            </div>
+            <div class="scroll">
+                <ng-container *ngFor="let character of characters">
+          
+                    <mat-card class="col-4 col-sm-4 col-md-5 w-100 col-sm characters-card mb-3">
+                      <div class="d-flex w-100">
+                        <img class="image h-50 w-50" [src]="character.image">
+                        <div class="d-flex justify-content-around w-100">
+                          <div class="d-flex flex-column">
+                            <h3>Nome: <span class='subtitle'>{{ character.name }}</span></h3>
+                            <h3>Espécie: <span class='subtitle'>{{ character.species }}</span></h3>
+                            <h3>Estado: <span class='subtitle'>{{ character.status }}</span></h3>
+                            <h3>Gênero: <span class='subtitle'>{{ character.gender }}</span></h3>             
+                          </div>
+                        </div>
+                      </div>
+                    </mat-card>
+                  </ng-container>
+            </div>
+            <div>
+            </div>
+        </mat-card>
+        <mat-card class="col-sm-4 text-center p-2 card">
+          <div class="d-flex justify-content-between align-items-center">
+            <h1>Localizações</h1>
+            <mat-icon class="h-10" (click)="redirectTo('localizacoes')">add_circle_outline</mat-icon>
+          </div>
+          <div class="scroll">
+              <ng-container *ngFor="let location of locations">
+        
+                  <mat-card class="col-4 col-sm-4 col-md-5 w-100 col-sm characters-card mb-3">
+                    <div class="d-flex w-100">
+                      <div class="d-flex justify-content-around w-100">
+                        <div class="d-flex flex-column">
+                          <h3>Nome: {{ location.name }}</h3>
+                          <h3>Dimensão: {{ location.dimension }}</h3>
+                          <h3>Tipo: {{ location.type }}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-card>
+                </ng-container>
+          </div>
+          <div>
+          </div>
+      </mat-card>
+      <mat-card class="col-sm-4 text-center p-2 card">
+        <div class="d-flex justify-content-between align-items-center">
+          <h1>Episódios</h1>
+          <mat-icon class="h-10" (click)="redirectTo('episodios')">add_circle_outline</mat-icon>
+        </div>
+        <div class="scroll">
+            <ng-container *ngFor="let episode of episodes">
+                <mat-card class="col-4 col-sm-4 col-md-5 w-100 col-sm characters-card mb-3">
+                  <div class="d-flex w-100">
+                    <div class="d-flex justify-content-around w-100">
+                      <div class="d-flex flex-column">
+                        <h3>Nome: {{ episode.name }}</h3>
+                        <h3>Temporada: {{ episode.episode }}</h3>
+                        <h3>Data: {{ episode.air_date | date:'dd/MM/yy' }}</h3>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card>
+              </ng-container>
+        </div>
+        <div>
+        </div>
+    </mat-card>
+    </div>
+</div>

@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { EMPTY, catchError } from 'rxjs';
 import { Return } from 'src/shared/models/API-return.model';
 import { LocationRickMorty } from 'src/shared/models/Location.model';
+import { FilterService } from 'src/shared/services/filter.service';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
 
 @Component({
@@ -49,13 +50,13 @@ export class FilterLocationsComponent {
 
   constructor(
     private rickMortyService: RickMortyService,
-    
+    private filterService: FilterService
   ) {}
 
   ngOnInit(): void {
+    this.filterService.sendData('Localizações')
     this.getInitialCharacters();
     this.filterLocationsByForm();
-    this.form.valueChanges.subscribe(v => console.log(v))
   }
 
   getInitialCharacters() {
@@ -99,9 +100,8 @@ export class FilterLocationsComponent {
       this.locations.push(...data.results);
       this.nextPage = data.info.next;
       if (!data.info.next) {
-        console.log('Todos os resultados coletados:', this.locations);
+        return;
       }
-      console.log(this.locations.length)
     });
   }
 

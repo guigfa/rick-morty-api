@@ -5,8 +5,11 @@ import { Character } from '../models/Character.model';
 import { Episode } from '../models/Episode.model';
 import { LocationRickMorty } from '../models/Location.model';
 import { Return } from '../models/API-return.model';
+import { enviroment } from '../enviroment/enviroment';
 
-const URI = 'https://rickandmortyapi.com/api'
+const characterURL = enviroment.characters;
+const locationURL = enviroment.locations;
+const episodeURL = enviroment.episodes;
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +21,11 @@ export class RickMortyService {
   getAllCharacters(url?: string): Observable<Return> {
     return url 
       ? this.httpClient.get<Return>(url) 
-      : this.httpClient.get<Return>(`${URI}/character`);
+      : this.httpClient.get<Return>(characterURL);
   }
 
   getCharactersById(id: number[]): Observable<Character> {
-    return this.httpClient.get<Character>(`${URI}/character/${id}`);
+    return this.httpClient.get<Character>(`${characterURL}/${id}`);
   }
   
   filterCharacter(character: Character): Observable<Return> {
@@ -33,15 +36,15 @@ export class RickMortyService {
     character.type ? params = params.append('type', character.type) : ''
     character.gender ? params = params.append('gender', character.gender) : ''
 
-    return this.httpClient.get<Return>(`${URI}/character/`, { params: params });
+    return this.httpClient.get<Return>(`${characterURL}/`, { params: params });
   }
 
   getAllLocations(): Observable<Return> {
-    return this.httpClient.get<Return>(`${URI}/location`)
+    return this.httpClient.get<Return>(`${locationURL}`)
   }
 
   getLocationById(id: number[]): Observable<LocationRickMorty[]> {
-    return this.httpClient.get<LocationRickMorty[]>(`${URI}/location/${id}`)
+    return this.httpClient.get<LocationRickMorty[]>(`${locationURL}/${id}`)
   }
 
   filterLocations(location: LocationRickMorty): Observable<Return> {
@@ -50,15 +53,15 @@ export class RickMortyService {
     location.type ? params = params.append('type', location.type): '';
     location.dimension ? params = params.append('dimension', location.dimension): '';
 
-    return this.httpClient.get<Return>(`${URI}/location`, { params: params })
+    return this.httpClient.get<Return>(`${locationURL}`, { params: params })
   }
 
   getAllEpisodes(): Observable<Return> {
-    return this.httpClient.get<Return>(`${URI}/episode`)
+    return this.httpClient.get<Return>(`${episodeURL}`)
   }
 
   getEpisodeById(id: number[]): Observable<Episode[]> {
-    return this.httpClient.get<Episode[]>(`${URI}/episode/${id}`)
+    return this.httpClient.get<Episode[]>(`${episodeURL}/${id}`)
   }
 
   filterEpisodes(episode: Episode): Observable<Return> {
@@ -66,7 +69,7 @@ export class RickMortyService {
     episode.name ? params = params.append('name', episode.name) : '';
     episode.episode ? params = params.append('episode', episode.episode): '';
 
-    return this.httpClient.get<Return>(`${URI}/episode/`, { params: params })
+    return this.httpClient.get<Return>(`${episodeURL}`, { params: params })
   }
 
   loadMoreData(url: string): Observable<any> {

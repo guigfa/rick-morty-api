@@ -1,11 +1,51 @@
-<div class="container d-flex align-items-center justify-content-center flex-column">
-    <h1>Nome:</h1>
-    <h1 (click)="a(character)">{{ character?.name }}</h1>
+<div class="container d-flex align-items-center mt-4 justify-content-center flex-column">
+    <button mat-raised-button color='warn' (click)="redirectTo()">Voltar</button>
+    <mat-card class="w-100 h-50 m-5 p-5">
+        <div class="d-flex  justify-content-between">
+            <div class="d-flex gap-5 flex-column">
+                <span class="fs-1">{{ character?.name }}</span>
+                <div class="d-flex align-items-baseline gap-2">
+                    <span class="fs-4">Espécie:</span> <span class='subtitle'>{{ character.species }}</span>
+                </div>
+                <div class="d-flex align-items-baseline gap-2">
+                    <span class="fs-4">Estado:</span> <span class='subtitle'>{{ character.status }}</span>
+                </div>
+                <div class="d-flex align-items-baseline gap-2">
+                    <span  class="fs-4">Gênero:</span> <span class='subtitle'>{{ character.gender }}</span>
+                </div>
+            </div>
+            <img [src]="character?.image" class="rounded-circle mb-20">
+        </div>
+        <mat-accordion class="accordion w-100">
+            <mat-expansion-panel class="expansion-panel" [expanded]="false">
+              <mat-expansion-panel-header >
+                <mat-panel-title class="additionals-title">
+                    Episódios em que participou:
+                </mat-panel-title>
+                <mat-panel-description >
+                    {{ episodes.length }} episódios!
+                </mat-panel-description>
+                <hr>
+            </mat-expansion-panel-header>
+            <div class="d-flex justify-content-around flex-column">
+                <ng-container *ngFor="let episode of episodes">
+                    <div class="d-flex gap-2 pb-2">
+                        <span class="font-weight">Nome: </span>
+                        <span>{{ episode.name }}</span>
+                    </div>
+                    <div class="d-flex gap-2 pb-2">
+                        <span class="font-weight">Criado em: </span>
+                        <span>{{ episode.created | date:'dd/MM/yy' }}</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <span class="font-weight">Ao ar em: </span><span>{{ episode.air_date | date:'dd/MM/yy' }}</span>
+                    </div>
+                    <hr>
+                    <br>
+                </ng-container>
+            </div>
+            </mat-expansion-panel>
+        </mat-accordion>
 
-    <img [src]="character?.image" class="rounded-circle mb-20">
-    <h2>Episódios:</h2>
-    <ng-container *ngFor="let episode of episodes">
-        {{ episode.name }}
-        <br>
-    </ng-container>
+    </mat-card>
 </div>

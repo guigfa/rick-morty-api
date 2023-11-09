@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Character } from 'src/shared/models/Character.model';
 import { Episode } from 'src/shared/models/Episode.model';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
@@ -18,7 +18,8 @@ export class DetailedCharacterComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private rickMortyService: RickMortyService
+    private rickMortyService: RickMortyService,
+    private router: Router
   ){}
 
   ngOnInit(): void {
@@ -49,7 +50,8 @@ export class DetailedCharacterComponent implements OnInit {
     }
   };
 
-  a(a: any) {
-    console.log(a)
+  redirectTo() {
+    this.router.navigate(['personagens']);
   }
+
 }

@@ -1,0 +1,20 @@
+<div class="container">
+
+    <ng-container *ngFor="let question of questions">
+        <div class="d-flex flex-column gap-3 m-5 text-center">
+
+            <div class="d-flex gap-3">
+                <span class="fs-4">Pergunta:</span><span class="fs-5">{{ question.question }}</span> 
+            </div>
+    
+            <mat-button-toggle-group style="width: fit-content;" (click)="getValue($event)">
+                <ng-container *ngFor="let option of question.options">
+                    <mat-button-toggle [value]="option">
+                        {{ option }}
+                    </mat-button-toggle>
+                </ng-container>
+            </mat-button-toggle-group>
+        </div>
+    </ng-container>
+    <button mat-raised-button color="primary">Enviar!</button>
+</div>

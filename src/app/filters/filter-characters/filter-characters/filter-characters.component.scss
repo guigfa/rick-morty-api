@@ -17,3 +17,20 @@
 .subtitle {
     font-size: 15px;
 }
+
+@media (max-width: 690px) {
+
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .characters-card {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
