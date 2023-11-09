@@ -8,22 +8,23 @@ import { DetailedCharacterComponent } from './detaileds/detailed-character/detai
 import { FiltersComponent } from './filters/filters.component';
 import { DetailedEpisodeComponent } from './detaileds/detailed-episode/detailed-episode.component';
 import { QuizComponent } from './quiz/quiz.component';
+import { DetailedLocationComponent } from './detaileds/detailed-location/detailed-location.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'inicio', pathMatch: 'full' }, 
-  { path: 'inicio', component: MainPageComponent},
+  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+  { path: 'inicio', component: MainPageComponent },
   { path: 'filtrar', component: FiltersComponent },
   { path: 'personagens', component: FilterCharactersComponent },
   { path: 'episodios', component: FilterEpisodesComponent },
-  { path: 'localizacoes', component: FilterLocationsComponent},
+  { path: 'localizacoes', component: FilterLocationsComponent },
   { path: 'personagem/:id', component: DetailedCharacterComponent },
   { path: 'episodio/:id', component: DetailedEpisodeComponent },
-  { path: 'quiz', component: QuizComponent }
-
+  { path: 'localizacao/:id', component: DetailedLocationComponent },
+  { path: 'quiz', component: QuizComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

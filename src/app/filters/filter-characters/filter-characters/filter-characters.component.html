@@ -1,67 +1,109 @@
 <div class="container">
-    <form class="example-section" [formGroup]="form">
-        <mat-radio-group aria-label="Select an option" formControlName="name">
-            <mat-radio-button value="Rick">Rick</mat-radio-button>
-            <mat-radio-button value="Morty">Morty</mat-radio-button>
-          </mat-radio-group>
+  <button color="warn" mat-raised-button (click)="back()">Voltar</button>
+  <form class="example-section" [formGroup]="form">
+    <mat-radio-group aria-label="Select an option" formControlName="name">
+      <mat-radio-button value="Rick">Rick</mat-radio-button>
+      <mat-radio-button value="Morty">Morty</mat-radio-button>
+    </mat-radio-group>
 
-          <mat-radio-group aria-label="Select an option" formControlName="gender">
-            <mat-radio-button value="female">Female</mat-radio-button>
-            <mat-radio-button value="male">Male</mat-radio-button>
-            <mat-radio-button value="genderless">Genderless</mat-radio-button>
-            <mat-radio-button value="unknown">unknown</mat-radio-button>
-
-          </mat-radio-group>
-    </form>
-      Seus personagens favoritos!
-    <ng-container *ngFor="let character of favoritedChars">
-      
-      <mat-card class="col-4 col-sm-4 col-md-5 h-25 col-sm characters-card">
+    <mat-radio-group aria-label="Select an option" formControlName="gender">
+      <mat-radio-button value="female">Female</mat-radio-button>
+      <mat-radio-button value="male">Male</mat-radio-button>
+      <mat-radio-button value="genderless">Genderless</mat-radio-button>
+      <mat-radio-button value="unknown">unknown</mat-radio-button>
+    </mat-radio-group>
+  </form>
+  Seus personagens favoritos!
+  <ng-container *ngFor="let character of favoritedChars">
+    <mat-card class="col-4 col-sm-4 col-md-5 h-25 col-sm characters-card">
+      <div class="d-flex w-100">
+        <img class="image" [src]="character.image" />
+        <div class="d-flex justify-content-between w-100">
+          <div class="d-flex flex-column">
+            <span class="fs-3">{{ character.name }}</span>
+            <h3>
+              Espécie: <span class="subtitle">{{ character.species }}</span>
+            </h3>
+            <h3>
+              Estado: <span class="subtitle">{{ character.status }}</span>
+            </h3>
+            <h3>
+              Gênero: <span class="subtitle">{{ character.gender }}</span>
+            </h3>
+          </div>
+          <div class="d-flex flex-column justify-content-between">
+            <mat-icon (click)="redirectToCharacter(character.id)" class="mr-20"
+              >add_circle_outline</mat-icon
+            >
+            <mat-icon
+              (click)="favorited(character.id)"
+              *ngIf="!favoritedsIds.includes(character.id)"
+              >star_border</mat-icon
+            >
+            <mat-icon
+              class="rounded-circle p-12"
+              style="color: yellow; background-color: black"
+              (click)="unfavorited(character.id)"
+              *ngIf="favoritedsIds.includes(character.id)"
+              >star</mat-icon
+            >
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </ng-container>
+  <input (input)="filterCharactersByInput($event)" />
+  <div
+    class="row d-flex align-items-center justify-content-center card-div main"
+  >
+    <ng-container *ngFor="let character of characters">
+      <mat-card class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm characters-card">
         <div class="d-flex w-100">
-          <img class="image" [src]="character.image">
+          <img class="image" [src]="character.image" />
           <div class="d-flex justify-content-between w-100">
-            <div class="d-flex flex-column">
-              <h3>Nome: <span class='subtitle'>{{ character.name }}</span></h3>
-              <h3>Espécie: <span class='subtitle'>{{ character.species }}</span></h3>
-              <h3>Estado: <span class='subtitle'>{{ character.status }}</span></h3>
-              <h3>Gênero: <span class='subtitle'>{{ character.gender }}</span></h3>
+            <div class="d-flex flex-column gap-4 pt-3">
+              <span class="fs-3">{{ character.name }}</span>
+              <div class="d-flex align-items-center gap-2">
+                <div
+                  class="status rounded-circle"
+                  [ngClass]="getStatus(character.status)"
+                ></div>
+                <span class="subtitle"
+                  >{{ character.status }} - {{ character.species }}</span
+                >
+              </div>
+              <div class="d-flex flex-column">
+                <span style="color: darkgray"> Residente de: </span>
+                <span> {{ character.location.name }} </span>
+              </div>
             </div>
-            <div class="d-flex flex-column justify-content-between">
-              <mat-icon (click)="redirectToCharacter(character.id)" class="mr-20">add_circle_outline</mat-icon>
-              <mat-icon (click)="favorited(character.id)" *ngIf="!favoritedsIds.includes(character.id)">star_border</mat-icon>
-              <mat-icon class="rounded-circle p-12" style="color: yellow; background-color: black;" (click)="unfavorited(character.id)" *ngIf="favoritedsIds.includes(character.id)">star</mat-icon>
-
+            <div class="d-flex flex-column justify-content-between p-2">
+              <mat-icon
+                style="color: white"
+                (click)="redirectToCharacter(character.id)"
+                class="mr-20"
+                >add_circle_outline</mat-icon
+              >
+              <mat-icon
+                (click)="favorited(character.id)"
+                *ngIf="!favoritedsIds.includes(character.id)"
+                >star_border</mat-icon
+              >
+              <mat-icon
+                class="rounded-circle p-12"
+                style="color: yellow; background-color: black"
+                (click)="unfavorited(character.id)"
+                *ngIf="favoritedsIds.includes(character.id)"
+                >star</mat-icon
+              >
             </div>
           </div>
         </div>
       </mat-card>
     </ng-container>
-    <input (input)="filterCharactersByInput($event) ">
-    <div class="row d-flex align-items-center justify-content-center card-div main">
-      <ng-container *ngFor="let character of characters">
-        <mat-card class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm characters-card">
-          <div class="d-flex w-100">
-            <img class="image" [src]="character.image">
-            <div class="d-flex justify-content-between w-100">
-              <div class="d-flex flex-column">
-                <h3>Nome: <span class='subtitle'>{{ character.name }}</span></h3>
-                <h3>Espécie: <span class='subtitle'>{{ character.species }}</span></h3>
-                <h3>Estado: <span class='subtitle'>{{ character.status }}</span></h3>
-                <h3>Gênero: <span class='subtitle'>{{ character.gender }}</span></h3>
-              </div>
-              <div class="d-flex flex-column justify-content-between p-2">
-                <mat-icon (click)="redirectToCharacter(character.id)" class="mr-20">add_circle_outline</mat-icon>
-                <mat-icon (click)="favorited(character.id)" *ngIf="!favoritedsIds.includes(character.id)">star_border</mat-icon>
-                <mat-icon class="rounded-circle p-12" style="color: yellow; background-color: black;" (click)="unfavorited(character.id)" *ngIf="favoritedsIds.includes(character.id)">star</mat-icon>
 
-              </div>
-            </div>
-          </div>
-        </mat-card>
-      </ng-container>
-
-      <ng-container *ngIf="error">
-        Não foi encontrado nenhum personagem com essas características!
-      </ng-container>
-    </div>
+    <ng-container *ngIf="error">
+      Não foi encontrado nenhum personagem com essas características!
+    </ng-container>
+  </div>
 </div>

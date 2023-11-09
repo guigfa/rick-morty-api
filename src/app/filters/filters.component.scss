@@ -1,14 +1,20 @@
 .card {
-    max-height: 450px;
+  max-height: 450px;
 }
 
 .scroll {
-    overflow-y: auto;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.column {
+  padding-left: 1rem;
+  align-items: start;
 }
 
 @media (max-width: 690px) {
-    .main {
-        display: flex;
-        flex-direction: column;
-    }
+  .main {
+    display: flex;
+    flex-direction: column;
+  }
 }

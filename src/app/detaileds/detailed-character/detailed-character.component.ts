@@ -7,7 +7,7 @@ import { RickMortyService } from 'src/shared/services/rick-morty.service';
 @Component({
   selector: 'app-detailed-character',
   templateUrl: './detailed-character.component.html',
-  styleUrls: ['./detailed-character.component.scss']
+  styleUrls: ['./detailed-character.component.scss'],
 })
 export class DetailedCharacterComponent implements OnInit {
   characterId: number;
@@ -20,38 +20,42 @@ export class DetailedCharacterComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private rickMortyService: RickMortyService,
     private router: Router
-  ){}
+  ) {}
 
   ngOnInit(): void {
-    this.characterId = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
+    this.characterId = parseInt(
+      this.activatedRoute.snapshot.paramMap.get('id')
+    );
     this.getCharacter();
   }
 
   getCharacter() {
-    this.rickMortyService.getCharactersById([this.characterId])
-      .subscribe(data => {
+    this.rickMortyService
+      .getCharactersById([this.characterId])
+      .subscribe((data) => {
         this.character = data;
         this.fetchPages(data.episode);
       });
   }
 
   fetchPages(urls: string[]) {
-    if(urls.length < 2) {
-      this.rickMortyService.loadMoreData(urls[0])
-        .subscribe(data => this.episodes.push(data))
+    if (urls.length < 2) {
+      this.rickMortyService
+        .loadMoreData(urls[0])
+        .subscribe((data) => this.episodes.push(data));
     } else {
-      urls.forEach(url => {
+      urls.forEach((url) => {
         const parts = url.split('/');
         const lastPart = parseInt(parts[parts.length - 1]);
         this.episodesId.push(lastPart);
-      })
-      this.rickMortyService.getEpisodeById(this.episodesId)
-        .subscribe(data => this.episodes = data);
+      });
+      this.rickMortyService
+        .getEpisodeById(this.episodesId)
+        .subscribe((data) => (this.episodes = data));
     }
-  };
+  }
 
   redirectTo() {
     this.router.navigate(['personagens']);
   }
-
 }

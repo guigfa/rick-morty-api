@@ -1,7 +1,7 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { EMPTY, catchError } from 'rxjs';
+import { EMPTY, Subscription, catchError } from 'rxjs';
 import { Return } from 'src/shared/models/API-return.model';
 import { Character } from 'src/shared/models/Character.model';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
@@ -11,9 +11,9 @@ import { FilterService } from 'src/shared/services/filter.service';
 @Component({
   selector: 'app-filter-characters',
   templateUrl: './filter-characters.component.html',
-  styleUrls: ['./filter-characters.component.scss']
+  styleUrls: ['./filter-characters.component.scss'],
 })
-export class FilterCharactersComponent implements OnInit {
+export class FilterCharactersComponent implements OnInit, OnDestroy {
   characters: any[] = [];
   favoritedsIds: number[] = [];
   favoritedChars: Character[] = [];
@@ -26,8 +26,10 @@ export class FilterCharactersComponent implements OnInit {
     gender: new FormControl(null),
     species: new FormControl(null),
     type: new FormControl(null),
-  })
+  });
   filterValue: string;
+  handleNewValue: string;
+  subscription: Subscription;
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -35,13 +37,12 @@ export class FilterCharactersComponent implements OnInit {
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
-    const margin = 300; 
-
+    const margin = 300;
 
     if (scrollY + windowHeight >= documentHeight - margin) {
-      if(!this.nextPage) return;
+      if (!this.nextPage) return;
       this.loading = true;
-      this.fetchPages(this.nextPage), {eventEmitter: false}; 
+      this.fetchPages(this.nextPage), { eventEmitter: false };
     }
   }
 
@@ -52,83 +53,92 @@ export class FilterCharactersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.filterService.getToolbarValue()
-      .subscribe((value) => this.filterValue = value);
-      if(this.filterValue) {
-        this.form.get('name').setValue(this.filterValue);
-        this.filter(this.form.value);
-      } else {
-        this.getInitialCharacters();
-        this.filterCharactersByForm();
-      }
-      
+    this.filterCharactersByForm();
+    this.handleFilters();
+  }
+
+  handleFilters() {
+    this.subscription = this.filterService
+      .getToolbarValue()
+      .subscribe((value) => {
+        this.filterValue = value;
+        if (this.filterValue) {
+          this.form.get('name').setValue(this.filterValue);
+        } else {
+          this.getInitialCharacters();
+          this.filterCharactersByForm();
+        }
+      });
+
     this.filterService.sendData('Personagens');
+    this.filterService.sendListPage(true);
   }
 
   getInitialCharacters() {
-    this.rickMortyService.getAllCharacters()
-      .subscribe(data => {
-        data.results.forEach(result => {
-          this.characters.push(result)
-          this.nextPage = data.info.next;
-        })
-      })
+    this.rickMortyService.getAllCharacters().subscribe((data) => {
+      data.results.forEach((result) => {
+        this.characters.push(result);
+        this.nextPage = data.info.next;
+      });
+    });
   }
 
   filterCharactersByInput(event: any) {
     let value = event.target.value;
-    let input = {name: ''}
-    input.name = value
-    if(value.length >= 5) this.filter(input);
+    let input = { name: '' };
+    input.name = value;
+    if (value.length >= 5) this.filter(input);
   }
 
-  filterCharactersByForm(){
+  filterCharactersByForm() {
     this.characters = [];
-    this.form.valueChanges.subscribe(() => this.filter(this.form.value))
+    this.form.valueChanges.subscribe((val) => {
+      this.handleNewValue = val.name;
+      this.filter(this.form.value);
+    });
   }
 
   filter(character: Character) {
     this.error = false;
     this.characters = [];
-    this.rickMortyService.filterCharacter(character)
-    .pipe(
-      catchError((error) => {
-        this.error = true;
-        console.log(this.error)
-        return EMPTY;
-      }
+    this.rickMortyService
+      .filterCharacter(character)
+      .pipe(
+        catchError((error) => {
+          this.error = true;
+          console.log(this.error);
+          return EMPTY;
+        })
       )
-    )
-    .subscribe((data) => {
-      data.results.forEach(result => this.characters.push(result))
-      this.nextPage = data.info.next;
-    })
-  };
+      .subscribe((data) => {
+        data.results.forEach((result) => this.characters.push(result));
+        this.nextPage = data.info.next;
+      });
+  }
 
   fetchPages(url: string) {
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: Return) => {
-        if(this.characters.includes(result)) return;
-      })
+        if (this.characters.includes(result)) return;
+      });
       this.characters.push(...data.results);
       this.nextPage = data.info.next;
       if (!data.info.next) {
         return;
       }
     });
-  };
+  }
 
   favorited(id: number) {
     this.favoritedsIds.push(id);
-    const character = this.characters.find(character => character.id === id);
+    const character = this.characters.find((character) => character.id === id);
     this.favoritedChars.push(character);
   }
 
-
   unfavorited(id: number) {
-    this.favoritedsIds = this.favoritedsIds.filter(ids => ids !== id);
-    this.favoritedChars = this.favoritedChars.filter(character => {
-      character.id !== id
+    this.favoritedsIds = this.favoritedsIds.filter((ids) => ids !== id);
+    this.favoritedChars = this.favoritedChars.filter((character) => {
+      character.id !== id;
     });
   }
 
@@ -136,7 +146,22 @@ export class FilterCharactersComponent implements OnInit {
     this.router.navigate([`/personagem/${id}`]);
   }
 
-  get GenderEnum() {
-    return Gender;
+  back() {
+    this.router.navigate(['filtrar']);
+  }
+
+  getStatus(status: string) {
+    if (status.toLowerCase() === 'alive') {
+      return 'green';
+    } else if (status.toLowerCase() === 'dead') {
+      return 'red';
+    } else {
+      return 'grey';
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.filterService.setToolbarValue(this.handleNewValue);
+    this.subscription.unsubscribe();
   }
 }

@@ -1,24 +1,40 @@
-<div class="container mt-5 w-100 d-flex flex-column align-items-center text-center">
-    <h1 class="font-weight-bold fs-1">Bem vindo(a) ao teste de API do Rick e Morty!</h1>
-    <span class="font-weight-bold fs-5">Aqui você pode listar personagens, episódios, locais e muito mais!</span>
-    <img style="width: 20%; height: 20%" src="https://images.squarespace-cdn.com/content/v1/528252b7e4b00150d03a4848/1503802785970-D7NOQ9UQNLYAY1F6MJAP/RickAndMorty_ScaredMorty1500.png">
+<div
+  class="container mt-5 w-100 d-flex flex-column align-items-center text-center"
+>
+  <h1 class="font-weight-bold fs-1">
+    Bem vindo(a) ao teste de API do Rick e Morty!
+  </h1>
+  <span class="font-weight-bold fs-5"
+    >Aqui você pode listar personagens, episódios, locais e muito mais!</span
+  >
+  <img
+    style="width: 20%; height: 20%"
+    src="https://images.squarespace-cdn.com/content/v1/528252b7e4b00150d03a4848/1503802785970-D7NOQ9UQNLYAY1F6MJAP/RickAndMorty_ScaredMorty1500.png"
+  />
 </div>
-<div class="container flex-column align-items-center d-flex w-100 justify-content-center gap-3 p-5">
+<div
+  class="container flex-column align-items-center d-flex w-100 justify-content-center gap-3 p-5"
+>
+  <button
+    mat-raised-button
+    (click)="redirectTo('filtrar')"
+    class="w-50 p-5 fs-5"
+  >
+    Listar personagens, episódios e locais!
+  </button>
 
-    <button mat-raised-button (click)="redirectTo('filtrar')" class="w-50 p-5 fs-5">Listar personagens, episódios e locais!</button>
-
-    <div class="d-flex justify-content-center gap-3 ">
-        <div class="row">
-            <div class="col-lg-6">
-                <button mat-raised-button class="buttons">
-                    <span class="fs-5">Ver seus favoritos!</span>
-                </button>
-            </div>
-            <div class="col-sm">
-                <button mat-raised-button class="buttons" (click)="redirectTo('quiz')">
-                    <span class="fs-5">Quiz!</span>
-                </button>
-            </div>
-
+  <div class="d-flex justify-content-center gap-3">
+    <div class="row">
+      <div class="col-lg-6">
+        <button mat-raised-button class="buttons">
+          <span class="fs-5">Ver seus favoritos!</span>
+        </button>
+      </div>
+      <div class="col-sm">
+        <button mat-raised-button class="buttons" (click)="redirectTo('quiz')">
+          <span class="fs-5">Quiz!</span>
+        </button>
+      </div>
     </div>
+  </div>
 </div>
