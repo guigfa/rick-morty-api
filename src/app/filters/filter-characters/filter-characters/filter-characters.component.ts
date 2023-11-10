@@ -30,6 +30,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   filterValue: string;
   handleNewValue: string;
   subscription: Subscription;
+  listToDisplay: string = 'Todos';
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -66,7 +67,6 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
           this.form.get('name').setValue(this.filterValue);
         } else {
           this.getInitialCharacters();
-          this.filterCharactersByForm();
         }
       });
 
@@ -137,9 +137,9 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
 
   unfavorited(id: number) {
     this.favoritedsIds = this.favoritedsIds.filter((ids) => ids !== id);
-    this.favoritedChars = this.favoritedChars.filter((character) => {
-      character.id !== id;
-    });
+    const control: any[] = [];
+    this.favoritedChars.forEach(char => char.id !== id ? control.push(char) : '')
+    this.favoritedChars = control;
   }
 
   redirectToCharacter(id: number) {
@@ -158,6 +158,10 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     } else {
       return 'grey';
     }
+  }
+
+  setList(event: any){
+    this.listToDisplay = event.value === 'Todos' ? 'Todos' : "Favoritos"
   }
 
   ngOnDestroy(): void {

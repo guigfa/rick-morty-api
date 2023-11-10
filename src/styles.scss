@@ -47,6 +47,13 @@ mat-card {
   margin-bottom: 1rem;
 }
 
+.image {
+  height: 40%;
+  width: 40%;
+  margin-right: 20px;
+  border-radius: 2px;
+}
+
 .status {
   height: 15px;
   width: 15px;
@@ -66,4 +73,8 @@ mat-card {
 
 .grey {
   background-color: gray;
+}
+
+span {
+  line-height: 1.5rem;
 }

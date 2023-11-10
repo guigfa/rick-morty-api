@@ -17,6 +17,7 @@ import { DetailedCharacterComponent } from './detaileds/detailed-character/detai
 import { DetailedEpisodeComponent } from './detaileds/detailed-episode/detailed-episode.component';
 import { DetailedLocationComponent } from './detaileds/detailed-location/detailed-location.component';
 import { QuizComponent } from './quiz/quiz.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { QuizComponent } from './quiz/quiz.component';
     DetailedCharacterComponent,
     DetailedEpisodeComponent,
     DetailedLocationComponent,
-    QuizComponent
+    QuizComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

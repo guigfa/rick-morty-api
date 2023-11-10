@@ -55,6 +55,16 @@ export class DetailedLocationComponent implements OnInit {
     }
   }
 
+  getStatus(status: string) {
+    if (status.toLowerCase() === 'alive') {
+      return 'green';
+    } else if (status.toLowerCase() === 'dead') {
+      return 'red';
+    } else {
+      return 'grey';
+    }
+  }
+
   redirectTo() {
     this.router.navigate(['episodios']);
   }

@@ -1,6 +1,12 @@
 ::ng-deep mat-select {
   height: 20px !important;
 }
+.toolbar {
+  position: relative;
+  top: 0;
+  left: 50%;
+  width: 50%;
+}
 
 .image {
   width: 20%;
@@ -12,6 +18,28 @@
   overflow: hidden !important;
 }
 
+
 ::placeholder {
   font-size: 1rem;
+}
+
+.margin-list {
+  margin: 0 1rem 0 0;
+}
+
+mat-list-item {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.search-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+}
+
+::ng-deep .mat-select-content{
+  width:2000px;
+  background-color: red;
+  font-size: 10px;   
 }

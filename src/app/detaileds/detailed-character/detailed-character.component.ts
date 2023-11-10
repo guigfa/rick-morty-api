@@ -55,6 +55,10 @@ export class DetailedCharacterComponent implements OnInit {
     }
   }
 
+  redirectToEpisode(id: number){
+    this.router.navigate([`episodio/${id}`])
+  }
+
   redirectTo() {
     this.router.navigate(['personagens']);
   }

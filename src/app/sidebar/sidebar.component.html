@@ -1,0 +1,32 @@
+<mat-sidenav-container class="drawer-container">
+    <mat-sidenav #drawer [autoFocus]="false" opened="true" mode="side">
+      <div class="d-flex">
+        <span class="fs-4 p-4 pb-0">Rick & Morty API</span>
+      </div>
+      <hr>
+      <!-- <input matInput appearance="outline" (input)="filter($event)" />
+      <button mat-stroked-button>Filtrar</button> -->
+      <mat-nav-list class="margin-list">
+        <mat-list-item (click)="redirectTo('')" class="list-item">
+          <mat-icon>home</mat-icon>
+          <span>Pagina Inicial</span>
+        </mat-list-item>
+        <mat-list-item (click)="redirectTo('personagens')">
+          <span>Personagens</span>
+        </mat-list-item>
+        <mat-list-item (click)="redirectTo('localizacoes')">
+          <span>Locais</span>
+        </mat-list-item>
+        <mat-list-item (click)="redirectTo('episodios')">
+          <span>Episódios</span>
+        </mat-list-item>
+        <mat-list-item (click)="redirectTo('quiz')">
+          <mat-icon>search</mat-icon>
+          <span>Quiz</span>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

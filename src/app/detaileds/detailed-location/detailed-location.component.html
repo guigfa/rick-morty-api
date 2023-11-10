@@ -35,37 +35,36 @@
           </mat-panel-description>
           <hr />
         </mat-expansion-panel-header>
-        <div class="d-flex justify-content-around flex-column">
+        <div class="d-flex justify-content-around flex-column gap-3">
           <ng-container *ngFor="let character of characters">
-            <mat-card
-              class="col-4 col-sm-4 col-md-5 p-0 h-25 mb-3 w-100 col-sm characters-card"
-            >
-              <div class="d-flex">
+            <mat-card class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm w-100 characters-card">
+              <div class="d-flex w-100">
                 <img class="image" [src]="character.image" />
-                <div class="d-flex justify-content-between">
-                  <div class="d-flex flex-column">
-                    <h3>
-                      Nome: <span class="subtitle">{{ character.name }}</span>
-                    </h3>
-                    <h3>
-                      Espécie:
-                      <span class="subtitle">{{ character.species }}</span>
-                    </h3>
-                    <h3>
-                      Estado:
-                      <span class="subtitle">{{ character.status }}</span>
-                    </h3>
-                    <h3>
-                      Gênero:
-                      <span class="subtitle">{{ character.gender }}</span>
-                    </h3>
+                <div class="d-flex justify-content-between w-100">
+                  <div class="d-flex flex-column gap-4 pt-3">
+                    <span class="fs-3">{{ character.name }}</span>
+                    <div class="d-flex align-items-center gap-2">
+                      <div
+                        class="status rounded-circle"
+                        [ngClass]="getStatus(character.status)"
+                      ></div>
+                      <span class="subtitle"
+                        >{{ character.status }} - {{ character.species }}</span
+                      >
+                    </div>
+                    <div class="d-flex flex-column">
+                      <span style="color: darkgray"> Residente de: </span>
+                      <span> {{ character.location.name }} </span>
+                    </div>
                   </div>
                   <div class="d-flex flex-column justify-content-between p-2">
                     <mat-icon
+                      style="color: white"
                       (click)="redirectToCharacter(character.id)"
                       class="mr-20"
                       >add_circle_outline</mat-icon
                     >
+
                   </div>
                 </div>
               </div>

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Return } from 'src/shared/models/API-return.model';
-import { Character } from 'src/shared/models/Character.model';
 import { FilterService } from 'src/shared/services/filter.service';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
 
@@ -39,6 +37,20 @@ export class FiltersComponent implements OnInit {
     this.rickMortyService
       .getAllLocations()
       .subscribe((data) => (this.locations = data.results));
+  }
+
+  filterAll() {
+  //   this.rickMortyService
+  //   .filterCharacter()
+  //   .subscribe((data) => (this.characters = data.results));
+
+  // this.rickMortyService
+  //   .filterCharacter()
+  //   .subscribe((data) => (this.episodes = data.results));
+
+  // this.rickMortyService
+  //   .filterCharacter()
+  //   .subscribe((data) => (this.locations = data.results));
   }
 
   redirectTo(route: string) {
