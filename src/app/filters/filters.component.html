@@ -9,51 +9,10 @@
   <span class="fs-6">
     Mas você já pode testar o filtro aqui mesmo com a listagem reduzida! =)
   </span>
-  <div class="d-flex gap-3 justify-content-between w-100 main mb-5">
-    <mat-card class="col-sm-4 text-center p-2 card">
+  <div class="d-flex gap-3 justify-content-center w-100 main mb-5">
+    <mat-card class="col-sm-3 text-center p-2 card">
       <div class="d-flex justify-content-between align-items-center">
-        <h1>Personagens</h1>
-        <mat-icon class="h-10" (click)="redirectTo('personagens')"
-          >add_circle_outline</mat-icon
-        >
-      </div>
-      <div class="card-line"></div>
-      <div class="scroll">
-        <ng-container *ngFor="let character of characters">
-          <mat-card
-            class="col-4 col-sm-4 col-md-5 w-100 col-sm characters-card mb-3"
-          >
-            <div class="d-flex w-100">
-              <img class="image w-50 h-50" [src]="character.image" />
-              <div class="d-flex justify-content-between w-100">
-                <div class="d-flex flex-column gap-4 pt-3 column">
-                  <span class="fs-3">{{ character.name }}</span>
-                  <div class="d-flex align-items-center gap-2">
-                    <div
-                      class="status rounded-circle"
-                      [ngClass]="getStatus(character.status)"
-                    ></div>
-                    <span class="subtitle"
-                      >{{ character.status }} - {{ character.species }}</span
-                    >
-                  </div>
-                  <div class="d-flex flex-column" style="text-align: left">
-                    <span style="color: darkgray;"
-                      >Residente de:
-                    </span>
-                    <span> {{ character.location.name }} </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </mat-card>
-        </ng-container>
-      </div>
-      <div></div>
-    </mat-card>
-    <mat-card class="col-sm-4 text-center p-2 card">
-      <div class="d-flex justify-content-between align-items-center">
-        <h1>Localizações</h1>
+        <h1 class="title">Localizações</h1>
         <mat-icon class="h-10" (click)="redirectTo('localizacoes')"
           >add_circle_outline</mat-icon
         >
@@ -84,9 +43,49 @@
       </div>
       <div></div>
     </mat-card>
-    <mat-card class="col-sm-4 text-center p-2 card">
+    <mat-card class="col-sm-5 text-center p-2 card">
       <div class="d-flex justify-content-between align-items-center">
-        <h1>Episódios</h1>
+        <h1 class="title">Personagens</h1>
+        <mat-icon class="h-10" (click)="redirectTo('personagens')"
+          >add_circle_outline</mat-icon
+        >
+      </div>
+      <div class="card-line"></div>
+      <div class="scroll">
+        <ng-container *ngFor="let character of characters">
+          <mat-card
+            class="col-4 col-sm-4 col-md-5 w-100 col-sm characters-card mb-3"
+          >
+            <div class="d-flex w-100">
+              <img class="image w-50 h-50" [src]="character.image" />
+              <div class="d-flex justify-content-between w-100">
+                <div class="d-flex flex-column gap-4 pt-3 column">
+                  <span class="fs-3">{{ character.name }}</span>
+                  <div class="d-flex align-items-center gap-2">
+                    <div
+                      class="status rounded-circle"
+                      [ngClass]="getStatus(character.status)"
+                    ></div>
+                    <span class="subtitle"
+                      >{{ character.status }} - {{ character.species }}</span
+                    >
+                  </div>
+                  <div class="d-flex flex-column" style="text-align: left">
+                    <span style="color: darkgray">Residente de: </span>
+                    <span> {{ character.location.name }} </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+        </ng-container>
+      </div>
+      <div></div>
+    </mat-card>
+
+    <mat-card class="col-sm-3 text-center p-2 card">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1 class="title">Episódios</h1>
         <mat-icon class="h-10" (click)="redirectTo('episodios')"
           >add_circle_outline</mat-icon
         >

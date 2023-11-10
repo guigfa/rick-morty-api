@@ -2,13 +2,7 @@
   color="primary"
   class="text-center d-flex justify-content-between align-items-center"
 >
-  <div class="d-flex align-items-center gap-3">
-    <mat-icon (click)="drawer.toggle()">menu</mat-icon>
-    <h2 (click)="redirectTo('')" style="cursor: pointer">
-      Rick & Morty API Test
-    </h2>
-  </div>
-  <div class="fs-3 d-flex align-items-center gap-3" *ngIf="isListPage">
+  <div class="fs-3 d-flex align-items-center gap-3">
     <form [formGroup]="form">
       <mat-form-field appearance="outline">
         <mat-select
@@ -23,53 +17,18 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          formControlName="value"
+          class="fs-5"
+          #input
+          placeholder="Digite aqui um nome"
+        />
+      </mat-form-field>
+      <button mat-stroked-button color="secondary" (click)="input.value = null">
+        Limpar
+      </button>
     </form>
-    <input
-      matInput
-      (input)="filter($event)"
-      class="fs-5"
-      #input
-      placeholder="Digite aqui um nome"
-    />
-    <button mat-stroked-button color="secondary" (click)="input.value = null">
-      Limpar
-    </button>
   </div>
-  <button mat-button [matMenuTriggerFor]="menu" class="p-0">
-    <mat-icon>person</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="redirectTo('personagens')">Item 1</button>
-    <button mat-menu-item (click)="redirectTo('episodios')">Item 2</button>
-  </mat-menu>
 </mat-toolbar>
-
-<mat-drawer-container class="drawer-container">
-  <mat-drawer #drawer opened="false" mode="side">
-    <input matInput appearance="outline" (input)="filter($event)" />
-    <button mat-stroked-button>Filtrar</button>
-    <mat-card> </mat-card>
-    <mat-nav-list>
-      <mat-list-item>
-        <mat-icon>home</mat-icon>
-        <span>Pagina Inicial</span>
-      </mat-list-item>
-      <mat-list-item>
-        <span>Personagens</span>
-      </mat-list-item>
-      <mat-list-item>
-        <span>Locais</span>
-      </mat-list-item>
-      <mat-list-item>
-        <span>Episódios</span>
-      </mat-list-item>
-      <mat-list-item>
-        <mat-icon>search</mat-icon>
-        <span>Quiz</span>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-drawer>
-  <mat-drawer-content>
-    <router-outlet></router-outlet>
-  </mat-drawer-content>
-</mat-drawer-container>

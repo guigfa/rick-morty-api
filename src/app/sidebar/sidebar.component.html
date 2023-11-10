@@ -1,26 +1,46 @@
-<mat-sidenav-container class="drawer-container">
-    <mat-sidenav #drawer [autoFocus]="false" opened="true" mode="side">
-      <div class="d-flex">
+<div class="" style="position: relative">
+  <app-toolbar
+    *ngIf="isListPage"
+    class="toolbar"
+
+  ></app-toolbar>
+  <mat-sidenav-container class="drawer-container">
+    <mat-sidenav #sidenav [autoFocus]="false" opened="true" mode="side">
+      <div class="d-flex title">
         <span class="fs-4 p-4 pb-0">Rick & Morty API</span>
+        <div style="height: 1px; background-color: white"></div>
       </div>
-      <hr>
+      <hr />
+
       <!-- <input matInput appearance="outline" (input)="filter($event)" />
-      <button mat-stroked-button>Filtrar</button> -->
+        <button mat-stroked-button>Filtrar</button> -->
       <mat-nav-list class="margin-list">
-        <mat-list-item (click)="redirectTo('')" class="list-item">
+        <mat-list-item class="mat-list-item" (click)="redirectTo('usuario')">
+          <mat-icon>person</mat-icon>
+          <span>Página do usuário</span>
+        </mat-list-item>
+        <mat-list-item (click)="redirectTo('')" class="mat-list-item">
           <mat-icon>home</mat-icon>
           <span>Pagina Inicial</span>
         </mat-list-item>
-        <mat-list-item (click)="redirectTo('personagens')">
+        <mat-list-item
+          class="mat-list-item"
+          (click)="redirectTo('personagens')"
+        >
           <span>Personagens</span>
         </mat-list-item>
-        <mat-list-item (click)="redirectTo('localizacoes')">
+        <mat-list-item
+          class="mat-list-item"
+          (click)="redirectTo('localizacoes')"
+        >
+          <mat-icon>location_on</mat-icon>
           <span>Locais</span>
         </mat-list-item>
-        <mat-list-item (click)="redirectTo('episodios')">
+        <mat-list-item class="mat-list-item" (click)="redirectTo('episodios')">
+          <mat-icon>book</mat-icon>
           <span>Episódios</span>
         </mat-list-item>
-        <mat-list-item (click)="redirectTo('quiz')">
+        <mat-list-item class="mat-list-item" (click)="redirectTo('quiz')">
           <mat-icon>search</mat-icon>
           <span>Quiz</span>
         </mat-list-item>
@@ -29,4 +49,5 @@
     <mat-sidenav-content>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
-</mat-sidenav-container>
+  </mat-sidenav-container>
+</div>

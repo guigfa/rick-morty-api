@@ -2,6 +2,11 @@
   max-height: 450px;
 }
 
+.title,
+mat-icon {
+  color: white;
+}
+
 .scroll {
   overflow-y: auto;
   padding-right: 0.5rem;

@@ -1,29 +1,19 @@
 import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
+import { FilterService } from 'src/shared/services/filter.service';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
+  isListPage: boolean;
 
-  @HostListener('document:scroll', ['$event'])
-  onScroll(event: Event) {
-    const scrollY = (event.target as Document).documentElement.scrollTop;
-    console.log(scrollY)
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-  
-    const margin = 300;
-  
-    if (scrollY + windowHeight >= documentHeight - margin) {
-      console.log('a')
-    }
+  constructor(private router: Router, private filterService: FilterService) {
+    this.filterService.isListPage$.subscribe((val) => (this.isListPage = val));
   }
 
-  constructor(private router: Router){}
-  
   redirectTo(component: string) {
     this.router.navigate([`${component}`]);
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from 'src/shared/services/filter.service';
 
@@ -7,7 +7,7 @@ import { FilterService } from 'src/shared/services/filter.service';
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss'],
 })
-export class MainPageComponent implements OnInit {
+export class MainPageComponent implements OnInit, AfterViewInit {
   constructor(private router: Router, private filterService: FilterService) {
     this.handleFilters();
   }
@@ -15,8 +15,10 @@ export class MainPageComponent implements OnInit {
   ngOnInit(): void {}
 
   handleFilters() {
-    this.filterService.sendData('');
     this.filterService.setToolbarValue(null);
+  }
+
+  ngAfterViewInit(): void {
     this.filterService.sendListPage(false);
   }
 

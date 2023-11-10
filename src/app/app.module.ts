@@ -32,7 +32,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     DetailedEpisodeComponent,
     DetailedLocationComponent,
     QuizComponent,
-    SidebarComponent
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,9 +40,9 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     HttpClientModule,
     MaterialModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

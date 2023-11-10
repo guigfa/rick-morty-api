@@ -24,6 +24,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   });
   subscription: Subscription;
   handleNewValue: string;
+  handlerSplitted: string[];
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -47,7 +48,6 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.filterEpisodesByForm();
     this.handleFilters();
   }
 
@@ -55,19 +55,23 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
     this.subscription = this.filterService
       .getToolbarValue()
       .subscribe((value) => {
-        this.filterValue = value;
-
-        if (this.filterValue) {
-          this.form.get('name').setValue(this.filterValue);
+        if (value) {
+          const splitted = value.split(':');
+          this.handlerSplitted = splitted;
+          const episode: Episode = {
+            [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
+          };
+          this.filter(episode);
+          this.handleNewValue = JSON.stringify(episode);
         } else {
           this.getInitialEpisodes();
         }
-        this.filterService.sendData('Episódios');
-        this.filterService.sendListPage(true);
       });
+    this.filterService.sendListPage(true);
   }
 
   getInitialEpisodes() {
+    this.episodes = [];
     this.rickMortyService.getAllEpisodes().subscribe((data) => {
       this.nextPage = data.info.next;
       data.results.forEach((result) => {
@@ -103,7 +107,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
       )
       .subscribe((data) =>
         data.results.forEach((result) => {
-          if (this.episodes.includes(JSON.stringify(result))) return;
+          if (this.episodes.includes(result)) return;
           this.episodes.push(result);
         })
       );
@@ -127,7 +131,11 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.filterService.setToolbarValue(this.handleNewValue);
     this.subscription.unsubscribe();
+    this.filterService.setToolbarValue(
+      this.handlerSplitted
+        ? `${this.handlerSplitted[0] ?? ''}:${this.handlerSplitted[1] ?? ''}`
+        : ''
+    );
   }
 }

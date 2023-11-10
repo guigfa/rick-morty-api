@@ -15,8 +15,10 @@ import { FilterService } from 'src/shared/services/filter.service';
 })
 export class FilterCharactersComponent implements OnInit, OnDestroy {
   characters: any[] = [];
-  favoritedsIds: number[] = [];
-  favoritedChars: Character[] = [];
+  favoritedsIds: number[] =
+    JSON.parse(localStorage.getItem('ids_favoritos')) ?? [];
+  favoritedChars: Character[] =
+    JSON.parse(localStorage.getItem('favoritos')) ?? [];
   error: boolean = false;
   loading: boolean = false;
   nextPage: string;
@@ -30,6 +32,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   filterValue: string;
   handleNewValue: string;
   subscription: Subscription;
+  handlerSplitted: string[];
   listToDisplay: string = 'Todos';
 
   @HostListener('window:scroll', ['$event'])
@@ -62,32 +65,29 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     this.subscription = this.filterService
       .getToolbarValue()
       .subscribe((value) => {
-        this.filterValue = value;
-        if (this.filterValue) {
-          this.form.get('name').setValue(this.filterValue);
+        if (value) {
+          const splitted = value.split(':');
+          this.handlerSplitted = splitted;
+          const character: Character = {
+            [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
+          };
+          this.filter(character);
+          this.handleNewValue = JSON.stringify(character);
         } else {
           this.getInitialCharacters();
         }
       });
-
-    this.filterService.sendData('Personagens');
     this.filterService.sendListPage(true);
   }
 
   getInitialCharacters() {
+    this.characters = [];
     this.rickMortyService.getAllCharacters().subscribe((data) => {
       data.results.forEach((result) => {
         this.characters.push(result);
         this.nextPage = data.info.next;
       });
     });
-  }
-
-  filterCharactersByInput(event: any) {
-    let value = event.target.value;
-    let input = { name: '' };
-    input.name = value;
-    if (value.length >= 5) this.filter(input);
   }
 
   filterCharactersByForm() {
@@ -138,7 +138,9 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   unfavorited(id: number) {
     this.favoritedsIds = this.favoritedsIds.filter((ids) => ids !== id);
     const control: any[] = [];
-    this.favoritedChars.forEach(char => char.id !== id ? control.push(char) : '')
+    this.favoritedChars.forEach((char) =>
+      char.id !== id ? control.push(char) : ''
+    );
     this.favoritedChars = control;
   }
 
@@ -160,12 +162,19 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     }
   }
 
-  setList(event: any){
-    this.listToDisplay = event.value === 'Todos' ? 'Todos' : "Favoritos"
+  setList(event: any) {
+    this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
   }
 
   ngOnDestroy(): void {
-    this.filterService.setToolbarValue(this.handleNewValue);
+    localStorage.setItem('ids_favoritos', JSON.stringify(this.favoritedsIds));
+    localStorage.setItem('favoritos', JSON.stringify(this.favoritedChars));
     this.subscription.unsubscribe();
+    console.log(this.handlerSplitted);
+    this.filterService.setToolbarValue(
+      this.handlerSplitted
+        ? `${this.handlerSplitted[0] ?? ''}:${this.handlerSplitted[1] ?? ''}`
+        : ''
+    );
   }
 }

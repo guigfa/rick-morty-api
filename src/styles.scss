@@ -1,11 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/bootstrap/scss/bootstrap";
-html, body { height: 100%; background-color: #FAFAFA; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
 
+html,
+body {
+  height: 100%;
+  background-color: #fafafa;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 mat-icon {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar-track {
@@ -13,13 +21,12 @@ mat-icon {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
   border-radius: 10px;
   background-color: rgb(213, 213, 213);
-  }
-  
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 6px;
   background-color: rgb(213, 213, 213);
-
 }
 
 ::-webkit-scrollbar-thumb {
@@ -33,17 +40,17 @@ mat-card {
   border: 1px solid black;
 }
 .characters-card {
-  background-color: #3C3E44 !important;
+  background-color: #3c3e44 !important;
 
   span {
-    color: #FEFEFE;
+    color: #fefefe;
   }
 }
 
 .card-line {
-  height: 1px; 
-  width: 100%; 
-  background-color: grey; 
+  height: 1px;
+  width: 100%;
+  background-color: grey;
   margin-bottom: 1rem;
 }
 
@@ -60,7 +67,12 @@ mat-card {
 }
 
 .container {
-  height: inherit !important;
+  min-height: 100vh;
+}
+
+.mat-button-toggle-checked {
+  color: black !important;
+  background-color: white !important;
 }
 
 .green {

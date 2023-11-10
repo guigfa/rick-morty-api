@@ -18,7 +18,6 @@
   overflow: hidden !important;
 }
 
-
 ::placeholder {
   font-size: 1rem;
 }
@@ -38,8 +37,8 @@ mat-list-item {
   border-radius: 50px;
 }
 
-::ng-deep .mat-select-content{
-  width:2000px;
+::ng-deep .mat-select-content {
+  width: 2000px;
   background-color: red;
-  font-size: 10px;   
+  font-size: 10px;
 }

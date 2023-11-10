@@ -20,7 +20,6 @@ export class FiltersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.filterService.sendData('Listagem');
     this.filterService.sendListPage(true);
     this.getInfos();
   }

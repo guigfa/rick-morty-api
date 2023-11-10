@@ -13,8 +13,8 @@ export class ToolbarComponent implements OnInit {
   isListPage: boolean = false;
   form: FormGroup = new FormGroup({
     query: new FormControl(null),
+    value: new FormControl('')
   });
-  label: string;
 
   filterParams: any[] = [
     { value: 'name', label: 'Nome' },
@@ -22,18 +22,18 @@ export class ToolbarComponent implements OnInit {
     { value: 'gender', label: 'Gênero' },
     { value: 'origin', label: 'Origem' },
     { value: 'name', label: 'Nome' },
-    { value: 'name', label: 'Nome' },
   ];
 
   constructor(private router: Router, private filterService: FilterService) {}
 
   ngOnInit(): void {
-    this.filterService.dataLabel$.subscribe((value) => {
-      this.label = value;
-    });
     this.filterService.isListPage$.subscribe((value) => {
       this.isListPage = value;
     });
+    this.form.valueChanges.subscribe(val => {
+      this.filter(this.form.value)
+    })
+    this.form.reset();
   }
 
   redirectTo(component: string) {
@@ -41,6 +41,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   filter(value: any) {
-    this.filterService.setToolbarValue(value.target.value);
+    if(!value.query) return;
+    this.filterService.setToolbarValue(`${value.query}:${value.value ?? ''}`)
   }
 }

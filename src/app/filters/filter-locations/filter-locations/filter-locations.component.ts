@@ -25,6 +25,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   filterValue: string;
   handleNewValue: string;
   subscription: Subscription;
+  handlerSplitted: string[];
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -55,7 +56,6 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.filterLocationsByForm();
     this.handleFilters();
   }
 
@@ -63,18 +63,23 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     this.subscription = this.filterService
       .getToolbarValue()
       .subscribe((value) => {
-        this.filterValue = value;
-        if (this.filterValue) {
-          this.form.get('name').setValue(this.filterValue);
+        if (value) {
+          const splitted = value.split(':');
+          this.handlerSplitted = splitted;
+          const location: LocationRickMorty = {
+            [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
+          };
+          this.filter(location);
+          this.handleNewValue = JSON.stringify(location);
         } else {
           this.getInitialLocations();
         }
       });
-    this.filterService.sendData('Localizações');
     this.filterService.sendListPage(true);
   }
 
   getInitialLocations() {
+    this.locations = [];
     this.rickMortyService.getAllLocations().subscribe((data) => {
       this.nextPage = data.info.next;
       data.results.forEach((result) => {
@@ -92,11 +97,12 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   filterLocationsByForm() {
     this.form.valueChanges.subscribe((val) => {
       this.handleNewValue = val.name;
-      this.filter(this.form.value);
+      // this.filter(this.form.value);
     });
   }
 
   filter(locations: LocationRickMorty) {
+    console.log(locations)
     this.error = false;
     this.locations = [];
     this.rickMortyService
@@ -134,7 +140,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.filterService.setToolbarValue(this.handleNewValue);
     this.subscription.unsubscribe();
+    this.filterService.setToolbarValue(this.handlerSplitted ? `${this.handlerSplitted[0] ?? ''}:${this.handlerSplitted[1] ?? ''}` : '');
   }
 }

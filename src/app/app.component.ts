@@ -5,46 +5,36 @@ import { catchError } from 'rxjs';
 import { Character } from 'src/shared/models/Character.model';
 import { Episode } from 'src/shared/models/Episode.model';
 import { LocationRickMorty } from 'src/shared/models/Location.model';
+import { FilterService } from 'src/shared/services/filter.service';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = 'rick-morty-test';
-
+  isListPage: boolean;
   test: any[] = [];
 
+  constructor(
+    private rickMortyService: RickMortyService,
+    private router: Router,
+    private filterService: FilterService
+  ) {}
 
-  constructor(private rickMortyService: RickMortyService, private router: Router) {}
+  fetchPages(url: string) {
+    this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
+      this.test.push(...data.results);
 
-  ngOnInit(): void {
+      if (data.info.next) {
+        this.fetchPages(data.info.next);
+      } else {
+        return;
+      }
+    });
+  }
 
-    // this.rickMortyService.getAllCharacters()
-    //   .subscribe((data: any) => {
-        
-    //     this.test.push(...data.results)
-    //     let nextPage = data.info.next;
-    //     if(nextPage) {
-    //       this.fetchPages(nextPage);
-    //     }
-              
-    //   });
-
-    }
-
-    fetchPages(url: string) {
-      this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
-        this.test.push(...data.results);
-    
-        if (data.info.next) {
-          this.fetchPages(data.info.next);
-        } else {
-          return;
-        }
-      });
-    }
-    
+  ngOnInit(): void {}
 }
