@@ -18,6 +18,8 @@ import { DetailedEpisodeComponent } from './detaileds/detailed-episode/detailed-
 import { DetailedLocationComponent } from './detaileds/detailed-location/detailed-location.component';
 import { QuizComponent } from './quiz/quiz.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { UserPageComponent } from './user-page/user-page.component';
+import { LoginPageComponent } from './login-page/login-page.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     DetailedLocationComponent,
     QuizComponent,
     SidebarComponent,
+    UserPageComponent,
+    LoginPageComponent,
   ],
   imports: [
     BrowserModule,

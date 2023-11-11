@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EMPTY, Subscription, catchError } from 'rxjs';
 import { Return } from 'src/shared/models/API-return.model';
@@ -19,8 +19,8 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   error: boolean = false;
   filterValue: string;
   form: FormGroup = new FormGroup({
-    name: new FormControl(null),
-    episode: new FormControl(null),
+    name: new FormControl('', [Validators.required]),
+    episode: new FormControl('', [Validators.required]),
   });
   subscription: Subscription;
   handleNewValue: string;
@@ -80,17 +80,12 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterEpisodesByInput(event: any) {
-    let input = { name: '' };
-    input.name = event;
-    if (event.length >= 5) this.filter(event);
-  }
-
-  filterEpisodesByForm() {
-    this.form.valueChanges.subscribe((val) => {
-      this.handleNewValue = val.name;
-      this.filter(this.form.value);
-    });
+  filterByForm() {
+    const episode: Episode = {
+      name: this.form.get('name').value,
+      episode: this.form.get('episode').value,
+    };
+    this.filter(episode);
   }
 
   filter(episodes: Episode) {
@@ -102,14 +97,17 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
         catchError((error) => {
           this.error = true;
           console.log(this.error);
+          this.nextPage = '';
           return EMPTY;
         })
       )
-      .subscribe((data) =>
+      .subscribe((data) => {
+        this.nextPage = data.info.next
         data.results.forEach((result) => {
           if (this.episodes.includes(result)) return;
           this.episodes.push(result);
         })
+      }
       );
   }
 
@@ -128,6 +126,10 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
 
   redirectToEpisode(id: number) {
     this.router.navigate([`episodio/${id}`]);
+  }
+
+  back(){
+    this.router.navigate(['episodios']);
   }
 
   ngOnDestroy(): void {

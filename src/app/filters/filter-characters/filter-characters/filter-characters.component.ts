@@ -1,11 +1,10 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EMPTY, Subscription, catchError } from 'rxjs';
 import { Return } from 'src/shared/models/API-return.model';
 import { Character } from 'src/shared/models/Character.model';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
-import { Gender } from 'src/shared/enums/genders.enum';
 import { FilterService } from 'src/shared/services/filter.service';
 
 @Component({
@@ -23,11 +22,9 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   nextPage: string;
   form: FormGroup = new FormGroup({
-    name: new FormControl(null),
-    status: new FormControl(null),
-    gender: new FormControl(null),
-    species: new FormControl(null),
-    type: new FormControl(null),
+    name: new FormControl('', [Validators.required]),
+    status: new FormControl('', [Validators.required]),
+    gender: new FormControl('', [Validators.required]),
   });
   filterValue: string;
   handleNewValue: string;
@@ -57,7 +54,6 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.filterCharactersByForm();
     this.handleFilters();
   }
 
@@ -90,12 +86,13 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterCharactersByForm() {
-    this.characters = [];
-    this.form.valueChanges.subscribe((val) => {
-      this.handleNewValue = val.name;
-      this.filter(this.form.value);
-    });
+  filterByForm() {
+    const character: Character = {
+      name: this.form.get('name').value,
+      status: this.form.get('status').value,
+      gender: this.form.get('gender').value,
+    };
+    this.filter(character);
   }
 
   filter(character: Character) {
@@ -107,6 +104,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
         catchError((error) => {
           this.error = true;
           console.log(this.error);
+          this.nextPage = '';
           return EMPTY;
         })
       )
@@ -150,6 +148,11 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
 
   back() {
     this.router.navigate(['filtrar']);
+  }
+
+  reset(){
+    this.form.reset(); 
+    this.getInitialCharacters();
   }
 
   getStatus(status: string) {

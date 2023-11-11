@@ -12,7 +12,7 @@
     class="example-section"
     [formGroup]="form"
     class="w-50"
-    style="margin: 0 auto"
+    style="margin: 2rem auto"
   >
     <div class="d-flex flex-column align-items-start">
       <div class="d-flex align-items-center gap-3">
@@ -44,10 +44,11 @@
             <mat-option value="unknown">Desconhecido</mat-option>
           </mat-select>
         </mat-form-field>
+        <button mat-raised-button color="primary" class="p3" [disabled]="!form.valid" (click)="filterByForm()">Filtrar!</button>
       </div>
       <div class="d-flex gap-3 justify-content-center" style="margin: 0 auto">
         <button color="warn" mat-raised-button (click)="back()">Voltar</button>
-        <button mat-stroked-button (click)="form.reset()">
+        <button mat-stroked-button (click)="reset()">
           Limpar filtros
         </button>
       </div>
@@ -107,7 +108,9 @@
     </ng-container>
   </div>
 
-  <ng-container *ngIf="error">
-    Não foi encontrado nenhum personagem com essas características!
+  <ng-container *ngIf="error" class="">
+    <div class="text-center w-100">
+      <span>Não foi encontrado nenhum personagem com essas características!</span>
+    </div>
   </ng-container>
 </div>

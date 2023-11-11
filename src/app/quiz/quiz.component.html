@@ -1,10 +1,10 @@
 <div class="container">
 
-    <ng-container *ngFor="let question of questions">
+    <ng-container *ngFor="let question of questions; let i = index">
         <div class="d-flex flex-column gap-3 m-5 text-center">
 
             <div class="d-flex gap-3">
-                <span class="fs-4">Pergunta:</span><span class="fs-5">{{ question.question }}</span> 
+                <span class="fs-4">{{i+1}})</span><span class="fs-5">{{ question.question }}</span> 
             </div>
     
             <mat-button-toggle-group style="width: fit-content;" (click)="getValue($event)">

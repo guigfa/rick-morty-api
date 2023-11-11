@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EMPTY, Subscription, catchError } from 'rxjs';
 import { Return } from 'src/shared/models/API-return.model';
@@ -18,9 +18,9 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   nextPage: string;
   error: boolean = false;
   form: FormGroup = new FormGroup({
-    name: new FormControl(null),
-    type: new FormControl(null),
-    dimension: new FormControl(null),
+    name: new FormControl('', [Validators.required]),
+    type: new FormControl('', [Validators.required]),
+    dimension: new FormControl('', [Validators.required]),
   });
   filterValue: string;
   handleNewValue: string;
@@ -88,21 +88,16 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterLocationsByInput(event: any) {
-    let input = { name: '' };
-    input.name = event;
-    if (event.length >= 5) this.filter(event);
-  }
-
-  filterLocationsByForm() {
-    this.form.valueChanges.subscribe((val) => {
-      this.handleNewValue = val.name;
-      // this.filter(this.form.value);
-    });
+  filterByForm() {
+    const location: LocationRickMorty = {
+      name: this.form.get('name').value,
+      type: this.form.get('status').value,
+      dimension: this.form.get('gender').value,
+    };
+    this.filter(location);
   }
 
   filter(locations: LocationRickMorty) {
-    console.log(locations)
     this.error = false;
     this.locations = [];
     this.rickMortyService
@@ -110,6 +105,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
       .pipe(
         catchError((error) => {
           this.error = true;
+          this.nextPage = '';
           return EMPTY;
         })
       )

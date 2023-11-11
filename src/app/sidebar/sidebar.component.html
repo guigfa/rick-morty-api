@@ -11,9 +11,6 @@
         <div style="height: 1px; background-color: white"></div>
       </div>
       <hr />
-
-      <!-- <input matInput appearance="outline" (input)="filter($event)" />
-        <button mat-stroked-button>Filtrar</button> -->
       <mat-nav-list class="margin-list">
         <mat-list-item class="mat-list-item" (click)="redirectTo('usuario')">
           <mat-icon>person</mat-icon>
@@ -22,6 +19,11 @@
         <mat-list-item (click)="redirectTo('')" class="mat-list-item">
           <mat-icon>home</mat-icon>
           <span>Pagina Inicial</span>
+        </mat-list-item>
+        <mat-list-item class="mat-list-item" (click)="redirectTo('filtrar')">
+          <mat-icon>person</mat-icon>
+          <span>Listagem Simplificada</span>
+          <mat-nav-list></mat-nav-list>
         </mat-list-item>
         <mat-list-item
           class="mat-list-item"
