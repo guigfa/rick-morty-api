@@ -14,8 +14,8 @@ import { AuthGuard } from 'src/shared/guard.guard';
 import { LoginPageComponent } from './login-page/login-page.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginPageComponent },
+  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   { path: 'inicio', component: MainPageComponent, canActivate: [AuthGuard] },
   { path: 'filtrar', component: FiltersComponent, canActivate: [AuthGuard] },
   { path: 'personagens', component: FilterCharactersComponent, canActivate: [AuthGuard] },
