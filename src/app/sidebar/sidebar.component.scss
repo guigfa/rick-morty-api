@@ -19,9 +19,12 @@ mat-list-item {
 
 .toggle-button {
   position: fixed;
-  left: 300px;
+  top: 3%;
+  left: 3%;
+  transform: translateY(-50%);
+  z-index: 2; /* Certifique-se de que o botão esteja acima do conteúdo principal */
+  /* Adicione estilos adicionais conforme necessário */
 }
-
 .mat-list-item {
   display: flex;
   gap: 3rem;
