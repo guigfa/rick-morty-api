@@ -6,6 +6,7 @@ import { Return } from 'src/shared/models/API-return.model';
 import { Character } from 'src/shared/models/Character.model';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
 import { FilterService } from 'src/shared/services/filter.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-filter-characters',
@@ -50,7 +51,8 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   constructor(
     private rickMortyService: RickMortyService,
     private router: Router,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -132,15 +134,25 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     this.favoritedsIds.push(id);
     const character = this.characters.find((character) => character.id === id);
     this.favoritedChars.push(character);
+    this.snackBar.open(`${character.name} favoritado!`, 'X');
+    this.setLocalStorage();
   }
 
   unfavorited(id: number) {
+    const char = this.favoritedChars.find((char) => char.id === id)
     this.favoritedsIds = this.favoritedsIds.filter((ids) => ids !== id);
     const control: any[] = [];
     this.favoritedChars.forEach((char) =>
       char.id !== id ? control.push(char) : ''
     );
     this.favoritedChars = control;
+    this.snackBar.open(`${char.name} desfavoritado!`, 'X');
+    this.setLocalStorage();
+  }
+
+  setLocalStorage() {
+    localStorage.setItem('ids_favoritos', JSON.stringify(this.favoritedsIds));
+    localStorage.setItem('favoritos', JSON.stringify(this.favoritedChars));
   }
 
   redirectToCharacter(id: number) {
@@ -171,10 +183,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    localStorage.setItem('ids_favoritos', JSON.stringify(this.favoritedsIds));
-    localStorage.setItem('favoritos', JSON.stringify(this.favoritedChars));
     this.subscription.unsubscribe();
-    console.log(this.handlerSplitted);
     this.filterService.setToolbarValue(
       this.handlerSplitted
         ? `${this.handlerSplitted[0] ?? ''}:${this.handlerSplitted[1] ?? ''}`

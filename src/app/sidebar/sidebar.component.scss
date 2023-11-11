@@ -10,11 +10,7 @@ mat-list-item {
 }
 
 .mat-drawer.mat-drawer-side {
-  transition: margin 0.3s, width 0.3s; /* Adicione uma transição suave para margin e width */
-}
-
-.mat-drawer.mat-drawer-side.mat-drawer-closed {
-  width: 200px; /* Largura do sidenav quando estiver fechado */
+  transition: margin 0.3s, width 0.3s;
 }
 
 .toggle-button {
@@ -22,9 +18,20 @@ mat-list-item {
   top: 3%;
   left: 3%;
   transform: translateY(-50%);
-  z-index: 2; /* Certifique-se de que o botão esteja acima do conteúdo principal */
-  /* Adicione estilos adicionais conforme necessário */
+  z-index: 2; 
 }
+
+.titulo {
+  // position: fixed;
+}
+
+.margin-list {
+  margin: 0 1rem 0 0;
+  position: fixed;
+}
+
+
+
 .mat-list-item {
   display: flex;
   gap: 3rem;

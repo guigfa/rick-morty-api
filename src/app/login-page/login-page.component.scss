@@ -1,0 +1,27 @@
+button {
+    border: none;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.image-divs {
+    
+    display: flex;
+    gap: 3rem;
+}
+
+.selected {
+    border-radius: 50px;
+    border: 5px solid #C2185B;
+}
+
+@media (max-width: 764px) {
+    .image-divs {
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+}
