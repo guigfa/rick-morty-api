@@ -120,6 +120,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
         if (this.characters.includes(result)) return;
         this.characters.push(result);
       });
+      console.log(this.characters.length)
       this.nextPage = data.info.next;
       if (!data.info.next) {
         return;
