@@ -118,8 +118,8 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: Return) => {
         if (this.characters.includes(result)) return;
+        this.characters.push(result);
       });
-      this.characters.push(...data.results);
       this.nextPage = data.info.next;
       if (!data.info.next) {
         return;

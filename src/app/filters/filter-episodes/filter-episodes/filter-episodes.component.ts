@@ -115,8 +115,8 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: Return) => {
         if (this.episodes.includes(result)) return;
+        this.episodes.push(result);
       });
-      this.episodes.push(...data.results);
       this.nextPage = data.info.next;
       if (!data.info.next) {
         return;

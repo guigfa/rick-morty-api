@@ -18,14 +18,38 @@ const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   { path: 'inicio', component: MainPageComponent, canActivate: [AuthGuard] },
   { path: 'filtrar', component: FiltersComponent, canActivate: [AuthGuard] },
-  { path: 'personagens', component: FilterCharactersComponent, canActivate: [AuthGuard] },
-  { path: 'episodios', component: FilterEpisodesComponent, canActivate: [AuthGuard] },
-  { path: 'localizacoes', component: FilterLocationsComponent, canActivate: [AuthGuard] },
-  { path: 'personagem/:id', component: DetailedCharacterComponent, canActivate: [AuthGuard] },
-  { path: 'episodio/:id', component: DetailedEpisodeComponent, canActivate: [AuthGuard] },
-  { path: 'localizacao/:id', component: DetailedLocationComponent, canActivate: [AuthGuard] },
+  {
+    path: 'personagens',
+    component: FilterCharactersComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'episodios',
+    component: FilterEpisodesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'localizacoes',
+    component: FilterLocationsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'personagem/:id',
+    component: DetailedCharacterComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'episodio/:id',
+    component: DetailedEpisodeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'localizacao/:id',
+    component: DetailedLocationComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'quiz', component: QuizComponent, canActivate: [AuthGuard] },
-  { path: 'usuario', component: UserPageComponent, canActivate: [AuthGuard] }
+  { path: 'usuario', component: UserPageComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

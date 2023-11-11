@@ -118,8 +118,8 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: Return) => {
         if (this.locations.includes(result)) return;
+        this.locations.push(result);
       });
-      this.locations.push(...data.results);
       this.nextPage = data.info.next;
       if (!data.info.next) {
         return;
