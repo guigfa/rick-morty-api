@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EMPTY, catchError } from 'rxjs';
 import { FilterService } from 'src/shared/services/filter.service';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
 
@@ -12,6 +14,13 @@ export class FiltersComponent implements OnInit {
   characters: any[] = [];
   episodes: any[] = [];
   locations: any[] = [];
+  errorCharacter: boolean = false;
+  errorLocation: boolean = false;
+  errorEpisode: boolean = false;
+
+  form: FormGroup = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+  });
 
   constructor(
     private rickMortyService: RickMortyService,
@@ -20,11 +29,15 @@ export class FiltersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.filterService.sendListPage(true);
+    this.filterService.sendListPage(false);
     this.getInfos();
   }
 
   getInfos() {
+    this.errorCharacter = false;
+    this.errorEpisode = false;
+    this.errorLocation = false;
+
     this.rickMortyService
       .getAllCharacters()
       .subscribe((data) => (this.characters = data.results));
@@ -39,17 +52,50 @@ export class FiltersComponent implements OnInit {
   }
 
   filterAll() {
-  //   this.rickMortyService
-  //   .filterCharacter()
-  //   .subscribe((data) => (this.characters = data.results));
+    this.errorCharacter = false;
+    this.errorEpisode = false;
+    this.errorLocation = false;
 
-  // this.rickMortyService
-  //   .filterCharacter()
-  //   .subscribe((data) => (this.episodes = data.results));
+    this.rickMortyService
+      .filterCharacter(this.form.value)
+      .pipe(
+        catchError((error) => {
+          this.errorCharacter = true;
+          return EMPTY;
+        })
+      )
+      .subscribe((data) => {
+        this.characters = data.results;
+      });
 
-  // this.rickMortyService
-  //   .filterCharacter()
-  //   .subscribe((data) => (this.locations = data.results));
+    this.rickMortyService
+      .filterEpisodes(this.form.value)
+      .pipe(
+        catchError((error) => {
+          this.errorEpisode = true;
+          return EMPTY;
+        })
+      )
+      .subscribe((data) => (this.characters = data.results));
+
+    this.rickMortyService
+      .filterLocations(this.form.value)
+      .pipe(
+        catchError((error) => {
+          this.errorLocation = true;
+          return EMPTY;
+        })
+      )
+      .subscribe((data) => (this.characters = data.results));
+  }
+
+  reset() {
+    this.getInfos();
+    this.form.reset();
+  }
+
+  back() {
+    this.router.navigate(['inicio']);
   }
 
   redirectTo(route: string) {

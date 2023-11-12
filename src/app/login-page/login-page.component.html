@@ -1,6 +1,7 @@
 <div class="container p-5">
   <div class="d-flex flex-column align-items-center w-100">
-    <span class="fs-1">Digite seu nome e escolha sua imagem de perfil</span>
+    <span class="fs-1 pb-5">Bem vindo(a) ao teste de API do Rick e Morty!</span>
+    <span class="fs-3">Digite seu nome e escolha sua imagem de perfil para iniciar</span>
 
     <div class="mt-5">
       <form [formGroup]="form">
@@ -24,6 +25,7 @@
             mat-raised-button
             color="primary"
             class="p-5"
+            [disabled]="!form.valid"
             (click)="send()"
           >
             Logar!

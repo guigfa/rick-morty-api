@@ -1,4 +1,5 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { MatDrawerMode } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { FilterService } from 'src/shared/services/filter.service';
 
@@ -7,11 +8,31 @@ import { FilterService } from 'src/shared/services/filter.service';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   isListPage: boolean;
+  mode: string;
 
-  constructor(private router: Router, private filterService: FilterService) {
+  constructor(
+    private router: Router,
+    private filterService: FilterService,
+  ) {
     this.filterService.isListPage$.subscribe((val) => (this.isListPage = val));
+  }
+
+  ngOnInit(): void {
+    this.updateMode();
+    window.addEventListener('resize', () => this.updateMode());
+  }
+
+  updateMode() {
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth <= 768) {
+      this.mode = 'over';
+    } else {
+      this.mode = 'side';
+    }
+    return this.mode as MatDrawerMode;
   }
 
   redirectTo(component: string) {

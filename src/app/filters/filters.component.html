@@ -1,13 +1,41 @@
 <div
   class="container d-flex w-100 justify-content-center align-items-center flex-column gap-3 mt-3"
 >
-  <span class="fs-1 d-flex align-items-center gap-2">
+  <span class="fs-1 d-flex align-items-center gap-2 mt-5">
     Clique no botão <mat-icon class="h-10">add_circle_outline</mat-icon> para a
     listagem completa!
   </span>
   <span class="fs-6">
     Mas você já pode testar o filtro aqui mesmo com a listagem reduzida! =)
   </span>
+  <form
+    class="example-section"
+    [formGroup]="form"
+    class="w-100"
+    style="margin: 2rem auto"
+  >
+    <div class="d-flex flex-column align-items-start">
+      <div class="d-flex align-items-center gap-3">
+        <mat-form-field>
+          <mat-label>Digite um nome</mat-label>
+          <input matInput appaerance="outline" formControlName="name" />
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          class="p3"
+          [disabled]="!form.valid"
+          (click)="filterAll()"
+        >
+          Filtrar!
+        </button>
+      </div>
+      <div class="d-flex gap-3 justify-content-center" style="margin: 0 auto">
+        <button color="warn" mat-raised-button (click)="back()">Voltar</button>
+        <button mat-stroked-button (click)="reset()">Limpar filtros</button>
+      </div>
+    </div>
+  </form>
   <div class="d-flex gap-3 justify-content-center w-100 main mb-5">
     <mat-card class="col-sm-3 text-center p-2 card">
       <div class="d-flex justify-content-between align-items-center">
@@ -18,26 +46,33 @@
       </div>
       <div class="card-line"></div>
       <div class="scroll">
-        <ng-container *ngFor="let location of locations">
-          <mat-card
-            class="col-4 col-sm-4 p-5 col-md-5 w-100 col-sm characters-card mb-3"
+        <ng-container>
+          <span style="color: white" *ngIf="errorLocation"
+            >Não foram encontradas localizações com este nome!</span
           >
-            <div class="d-flex w-100">
-              <div class="d-flex justify-content-around w-100">
-                <div class="d-flex flex-column gap-3">
-                  <span class="fs-3">{{ location.name }}</span>
-                  <div class="d-flex flex-column gap-1">
-                    <span style="color: darkgray">Dimensão:</span>
-                    <span>{{ location.dimension }}</span>
-                  </div>
-                  <div class="d-flex flex-column gap-1">
-                    <span style="color: darkgray">Tipo:</span>
-                    <span>{{ location.type }}</span>
+        </ng-container>
+        <ng-container *ngIf="!errorLocation">
+          <ng-container *ngFor="let location of locations">
+            <mat-card
+              class="col-4 col-sm-4 p-5 col-md-5 w-100 col-sm characters-card mb-3"
+            >
+              <div class="d-flex w-100">
+                <div class="d-flex justify-content-around w-100">
+                  <div class="d-flex flex-column gap-3">
+                    <span class="fs-3">{{ location.name }}</span>
+                    <div class="d-flex flex-column gap-1">
+                      <span style="color: darkgray">Dimensão:</span>
+                      <span>{{ location.dimension }}</span>
+                    </div>
+                    <div class="d-flex flex-column gap-1">
+                      <span style="color: darkgray">Tipo:</span>
+                      <span>{{ location.type }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </mat-card>
+            </mat-card>
+          </ng-container>
         </ng-container>
       </div>
       <div></div>
@@ -51,32 +86,39 @@
       </div>
       <div class="card-line"></div>
       <div class="scroll">
-        <ng-container *ngFor="let character of characters">
-          <mat-card
-            class="col-4 col-sm-4 col-md-5 w-100 col-sm characters-card mb-3"
+        <ng-container *ngIf="errorCharacter">
+          <span style="color: white"
+            >Não foram encontrados personagens com este nome!</span
           >
-            <div class="d-flex w-100">
-              <img class="image w-50 h-50" [src]="character.image" />
-              <div class="d-flex justify-content-between w-100">
-                <div class="d-flex flex-column gap-4 pt-3 column">
-                  <span class="fs-3">{{ character.name }}</span>
-                  <div class="d-flex align-items-center gap-2">
-                    <div
-                      class="status rounded-circle"
-                      [ngClass]="getStatus(character.status)"
-                    ></div>
-                    <span class="subtitle"
-                      >{{ character.status }} - {{ character.species }}</span
-                    >
-                  </div>
-                  <div class="d-flex flex-column" style="text-align: left">
-                    <span style="color: darkgray">Residente de: </span>
-                    <span> {{ character.location.name }} </span>
+        </ng-container>
+        <ng-container *ngIf="!errorCharacter">
+          <ng-container *ngFor="let character of characters">
+            <mat-card
+              class="col-4 col-sm-4 col-md-5 w-100 col-sm characters-card mb-3"
+            >
+              <div class="d-flex w-100">
+                <img class="image w-50 h-50" [src]="character.image" />
+                <div class="d-flex justify-content-between w-100">
+                  <div class="d-flex flex-column gap-4 pt-3 column">
+                    <span class="fs-3">{{ character.name }}</span>
+                    <div class="d-flex align-items-center gap-2">
+                      <div
+                        class="status rounded-circle"
+                        [ngClass]="getStatus(character.status)"
+                      ></div>
+                      <span class="subtitle"
+                        >{{ character.status }} - {{ character.species }}</span
+                      >
+                    </div>
+                    <div class="d-flex flex-column" style="text-align: left">
+                      <span style="color: darkgray">Residente de: </span>
+                      <span> {{ character.location.name }} </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </mat-card>
+            </mat-card>
+          </ng-container>
         </ng-container>
       </div>
       <div></div>
@@ -91,26 +133,33 @@
       </div>
       <div class="card-line"></div>
       <div class="scroll">
-        <ng-container *ngFor="let episode of episodes">
-          <mat-card
-            class="col-4 col-sm-4 p-5 col-md-5 w-100 col-sm characters-card mb-3"
-          >
-            <div class="d-flex w-100">
-              <div class="d-flex justify-content-around w-100">
-                <div class="d-flex flex-column gap-3">
-                  <span class="fs-3">{{ episode.name }}</span>
-                  <div class="d-flex flex-column gap-1">
-                    <span style="color: darkgray">Temporada:</span>
-                    <span>{{ episode.episode }}</span>
-                  </div>
-                  <div class="d-flex flex-column gap-1">
-                    <span style="color: darkgray">Data:</span>
-                    <span>{{ episode.air_date | date : "dd/MM/yy" }}</span>
+        <ng-container *ngIf="errorEpisode">
+          <span style="color: white">
+            Não foram encontrados episódios com este nome!
+          </span>
+        </ng-container>
+        <ng-container *ngIf="!errorEpisode">
+          <ng-container *ngFor="let episode of episodes">
+            <mat-card
+              class="col-4 col-sm-4 p-5 col-md-5 w-100 col-sm characters-card mb-3"
+            >
+              <div class="d-flex w-100">
+                <div class="d-flex justify-content-around w-100">
+                  <div class="d-flex flex-column gap-3">
+                    <span class="fs-3">{{ episode.name }}</span>
+                    <div class="d-flex flex-column gap-1">
+                      <span style="color: darkgray">Temporada:</span>
+                      <span>{{ episode.episode }}</span>
+                    </div>
+                    <div class="d-flex flex-column gap-1">
+                      <span style="color: darkgray">Data:</span>
+                      <span>{{ episode.air_date | date : "dd/MM/yy" }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </mat-card>
+            </mat-card>
+          </ng-container>
         </ng-container>
       </div>
       <div></div>

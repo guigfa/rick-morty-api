@@ -15,14 +15,13 @@ mat-list-item {
 
 .toggle-button {
   position: fixed;
-  top: 3%;
-  left: 3%;
+  top: 5%;
   transform: translateY(-50%);
   z-index: 2; 
 }
 
-.titulo {
-  // position: fixed;
+.button {
+  margin-left: 1rem;
 }
 
 .margin-list {

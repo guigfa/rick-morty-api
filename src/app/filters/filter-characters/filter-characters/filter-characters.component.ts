@@ -118,11 +118,10 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
 
   fetchPages(url: string) {
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
-      data.results.forEach((result: Return) => {
-        if (this.characters.includes(result)) return;
+      data.results.forEach((result: Character) => {
+        if (this.characters.includes(result.name)) return;
         this.characters.push(result);
       });
-      console.log(this.characters.length)
       this.nextPage = data.info.next;
       if (!data.info.next) {
         return;
@@ -180,6 +179,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
 
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
+    console.log(this.favoritedsIds.length)
   }
 
   ngOnDestroy(): void {

@@ -67,7 +67,7 @@ export class RickMortyService {
   filterEpisodes(episode: Episode): Observable<Return> {
     let params = new HttpParams();
     episode.name ? params = params.append('name', episode.name) : '';
-    episode.episode ? params = params.append('episode', episode.episode): '';
+    episode.episode ? params = params.append('episode', `S0${episode.episode}`): '';
 
     return this.httpClient.get<Return>(`${episodeURL}`, { params: params })
   }

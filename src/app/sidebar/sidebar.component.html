@@ -2,7 +2,12 @@
   <app-toolbar *ngIf="isListPage" class="toolbar"></app-toolbar>
 
   <mat-sidenav-container class="drawer-container">
-    <mat-sidenav #sidenav [autoFocus]="false" opened="false" mode="over">
+    <mat-sidenav
+      #sidenav
+      [autoFocus]="false"
+      opened="false"
+      [mode]="updateMode()"
+    >
       <div class="d-flex title">
         <span class="fs-4 p-4 pb-0 titulo">Rick & Morty API</span>
         <div style="height: 1px; background-color: white"></div>
@@ -10,45 +15,71 @@
       <hr />
       <mat-nav-list class="margin-list">
         <mat-list-item class="mat-list-item" (click)="redirectTo('usuario')">
-          <mat-icon>person</mat-icon>
-          <span>Página do usuário</span>
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>person</mat-icon>
+            <span>Página do usuário</span>
+          </div>
         </mat-list-item>
         <mat-list-item (click)="redirectTo('')" class="mat-list-item">
-          <mat-icon>home</mat-icon>
-          <span>Pagina Inicial</span>
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>home</mat-icon>
+            <span>Pagina Inicial</span>
+          </div>
         </mat-list-item>
         <mat-list-item class="mat-list-item" (click)="redirectTo('filtrar')">
-          <mat-icon>person</mat-icon>
-          <span>Listagem Simplificada</span>
-          <mat-nav-list></mat-nav-list>
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>list</mat-icon>
+            <span>Listagem Simplificada</span>
+          </div>
         </mat-list-item>
-        <mat-list-item
-          class="mat-list-item"
-          (click)="redirectTo('personagens')"
+        <hr>
+        <mat-list-item class="mat-list-item" (click)="redirectTo('personagens')"
         >
-          <span>Personagens</span>
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>face</mat-icon>
+            <span>Personagens</span>
+          </div>
         </mat-list-item>
-        <mat-list-item
-          class="mat-list-item"
-          (click)="redirectTo('localizacoes')"
+        <mat-list-item class="mat-list-item" (click)="redirectTo('localizacoes')"
         >
-          <mat-icon>location_on</mat-icon>
-          <span>Locais</span>
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>location_on</mat-icon>
+            <span>Locais</span>
+          </div>
         </mat-list-item>
         <mat-list-item class="mat-list-item" (click)="redirectTo('episodios')">
-          <mat-icon>book</mat-icon>
-          <span>Episódios</span>
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>book</mat-icon>
+            <span>Episódios</span>
+          </div>
         </mat-list-item>
         <mat-list-item class="mat-list-item" (click)="redirectTo('quiz')">
-          <mat-icon>search</mat-icon>
-          <span>Quiz</span>
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>question_answer</mat-icon>
+            <span>Quiz</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item class="mat-list-item" (click)="redirectTo('quiz')">
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>star</mat-icon>
+            <span>Favoritos</span>
+          </div>
         </mat-list-item>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-      <router-outlet></router-outlet>
-      <button mat-stroked-button class="toggle-button" (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+      <router-outlet>
+        <div class="button">
+          <button
+            mat-stroked-button
+            class="toggle-button d-flex justify-content-center"
+            (click)="sidenav.toggle()"
+          >
+            <mat-icon class="m-0">menu</mat-icon>
+          </button>
+        </div>
+      </router-outlet>
     </mat-sidenav-content>
-
+    <button>a</button>
   </mat-sidenav-container>
 </div>

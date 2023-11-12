@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/shared/guard/auth-guard.service';
 
@@ -18,8 +18,8 @@ export class LoginPageComponent implements OnInit {
   ]
 
   form: FormGroup = new FormGroup({
-    name: new FormControl(''),
-    image: new FormControl(''),
+    name: new FormControl('', [Validators.required]),
+    image: new FormControl('', [Validators.required]),
   });
 
   constructor(private authService: AuthService, private router: Router) {}

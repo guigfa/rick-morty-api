@@ -1,5 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { EMPTY, Subscription, catchError } from 'rxjs';
 import { Return } from 'src/shared/models/API-return.model';
@@ -19,12 +20,17 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   error: boolean = false;
   filterValue: string;
   form: FormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    episode: new FormControl('', [Validators.required]),
+    name: new FormControl(''),
+    episode: new FormControl(''),
   });
   subscription: Subscription;
   handleNewValue: string;
   handlerSplitted: string[];
+  listToDisplay: string = 'Todos';
+  favoritedsIds: number[] =
+    JSON.parse(localStorage.getItem('ids_favoritos_eps')) ?? [];
+  favoritedEps: Episode[] =
+    JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -44,7 +50,8 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   constructor(
     private rickMortyService: RickMortyService,
     private filterService: FilterService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -102,19 +109,18 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((data) => {
-        this.nextPage = data.info.next
+        this.nextPage = data.info.next;
         data.results.forEach((result) => {
           if (this.episodes.includes(result)) return;
           this.episodes.push(result);
-        })
-      }
-      );
+        });
+      });
   }
 
   fetchPages(url: string) {
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
-      data.results.forEach((result: Return) => {
-        if (this.episodes.includes(result)) return;
+      data.results.forEach((result: Episode) => {
+        if (this.episodes.includes(result.name)) return;
         this.episodes.push(result);
       });
       this.nextPage = data.info.next;
@@ -122,14 +128,53 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
         return;
       }
     });
+    console.log(this.episodes.length);
+  }
+
+  favorited(id: number) {
+    this.favoritedsIds.push(id);
+    const episode = this.episodes.find((episode) => episode.id === id);
+    this.favoritedEps.push(episode);
+    this.snackBar.open(`${episode.name} favoritado!`, 'X');
+    this.setLocalStorage();
+  }
+
+  unfavorited(id: number) {
+    const ep = this.favoritedEps.find((ep) => ep.id === id);
+    this.favoritedsIds = this.favoritedsIds.filter((ids) => ids !== id);
+    const control: any[] = [];
+    this.favoritedEps.forEach((char) =>
+      char.id !== id ? control.push(char) : ''
+    );
+    this.favoritedEps = control;
+    this.snackBar.open(`${ep.name} desfavoritado!`, 'X');
+    this.setLocalStorage();
+  }
+
+  setLocalStorage() {
+    localStorage.setItem(
+      'ids_favoritos_eps',
+      JSON.stringify(this.favoritedsIds)
+    );
+    localStorage.setItem('favoritos_eps', JSON.stringify(this.favoritedEps));
+  }
+
+  setList(event: any) {
+    this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
+    console.log(this.favoritedsIds.length);
+  }
+
+  reset() {
+    this.form.reset();
+    this.getInitialEpisodes();
   }
 
   redirectToEpisode(id: number) {
     this.router.navigate([`episodio/${id}`]);
   }
 
-  back(){
-    this.router.navigate(['episodios']);
+  back() {
+    this.router.navigate(['filtrar']);
   }
 
   ngOnDestroy(): void {
