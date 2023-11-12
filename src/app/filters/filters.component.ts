@@ -76,7 +76,7 @@ export class FiltersComponent implements OnInit {
           return EMPTY;
         })
       )
-      .subscribe((data) => (this.characters = data.results));
+      .subscribe((data) => (this.episodes = data.results));
 
     this.rickMortyService
       .filterLocations(this.form.value)
@@ -86,7 +86,7 @@ export class FiltersComponent implements OnInit {
           return EMPTY;
         })
       )
-      .subscribe((data) => (this.characters = data.results));
+      .subscribe((data) => (this.locations = data.results));
   }
 
   reset() {

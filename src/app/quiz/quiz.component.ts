@@ -17,11 +17,9 @@ export class QuizComponent {
 
   constructor(private filterService: FilterService) {
     this.filterService.sendListPage(false);
-    console.log(this.questions);
   }
 
   changeAnswers(event: any, id: number) {
-    console.log(event);
     if (!this.checkedQuestion.find((identifier) => identifier === id)) {
       this.hasChanged++;
       this.checkedQuestion.push(id);
@@ -41,8 +39,6 @@ export class QuizComponent {
         this.count--;
       }
     }
-    console.log(this.checkedQuestion);
-    console.log(this.count);
   }
 
   checkResult() {

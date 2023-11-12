@@ -25,8 +25,4 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   redirectTo(route: string) {
     this.router.navigate([`${route}`]);
   }
-
-  sendName(input: any) {
-    console.log(input)
-  }
 }

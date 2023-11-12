@@ -53,7 +53,7 @@ export class RickMortyService {
     location.type ? params = params.append('type', location.type): '';
     location.dimension ? params = params.append('dimension', location.dimension): '';
 
-    return this.httpClient.get<Return>(`${locationURL}`, { params: params })
+    return this.httpClient.get<Return>(`${locationURL}/`, { params: params })
   }
 
   getAllEpisodes(): Observable<Return> {
@@ -69,7 +69,7 @@ export class RickMortyService {
     episode.name ? params = params.append('name', episode.name) : '';
     episode.episode ? params = params.append('episode', `S0${episode.episode}`): '';
 
-    return this.httpClient.get<Return>(`${episodeURL}`, { params: params })
+    return this.httpClient.get<Return>(`${episodeURL}/`, { params: params })
   }
 
   loadMoreData(url: string): Observable<any> {

@@ -116,15 +116,16 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
           return EMPTY;
         })
       )
-      .subscribe((data) =>
-        data.results.forEach((result) => this.locations.push(result))
-      );
+      .subscribe((data) => {
+        this.locations = [];
+        data.results.forEach((result) => this.locations.push(result));
+        this.nextPage = data.info.next;
+      });
   }
 
   fetchPages(url: string) {
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: LocationRickMorty) => {
-        console.log(result);
         if (this.locations.includes(result.name)) return;
         this.locations.push(result);
       });

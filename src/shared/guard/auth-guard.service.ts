@@ -8,7 +8,6 @@ export class AuthService {
   private isAuthenticated: boolean = false;
 
   authenticate(username: string, image: string): boolean {
-    console.log(username, image)
     if (username && image) {
       this.isAuthenticated = true;
       return true;

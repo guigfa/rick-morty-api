@@ -109,11 +109,9 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((data) => {
+        this.episodes = [];
+        data.results.forEach((result) => this.episodes.push(result));
         this.nextPage = data.info.next;
-        data.results.forEach((result) => {
-          if (this.episodes.includes(result)) return;
-          this.episodes.push(result);
-        });
       });
   }
 
@@ -128,7 +126,6 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
         return;
       }
     });
-    console.log(this.episodes.length);
   }
 
   favorited(id: number) {
@@ -161,7 +158,6 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
 
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
-    console.log(this.favoritedsIds.length);
   }
 
   reset() {

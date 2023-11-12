@@ -111,6 +111,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((data) => {
+        this.characters = [];
         data.results.forEach((result) => this.characters.push(result));
         this.nextPage = data.info.next;
       });
@@ -133,7 +134,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     this.favoritedsIds.push(id);
     const character = this.characters.find((character) => character.id === id);
     this.favoritedChars.push(character);
-    this.snackBar.open(`${character.name} favoritado!`, 'X');
+    this.snackBar.open(`${character.name} favoritado!`, 'X', {duration: 1000});
     this.setLocalStorage();
   }
 
@@ -145,7 +146,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
       char.id !== id ? control.push(char) : ''
     );
     this.favoritedChars = control;
-    this.snackBar.open(`${char.name} desfavoritado!`, 'X');
+    this.snackBar.open(`${char.name} desfavoritado!`, 'X', {duration: 1000});
     this.setLocalStorage();
   }
 
@@ -179,7 +180,6 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
 
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
-    console.log(this.favoritedsIds.length)
   }
 
   ngOnDestroy(): void {
