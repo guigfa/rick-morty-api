@@ -4,34 +4,33 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { EMPTY, Subscription, catchError } from 'rxjs';
 import { Return } from 'src/shared/models/API-return.model';
-import { LocationRickMorty } from 'src/shared/models/Location.model';
+import { Episode } from 'src/shared/models/Episode.model';
 import { FilterService } from 'src/shared/services/filter.service';
 import { RickMortyService } from 'src/shared/services/rick-morty.service';
 
 @Component({
-  selector: 'app-filter-locations',
-  templateUrl: './filter-locations.component.html',
-  styleUrls: ['./filter-locations.component.scss'],
+  selector: 'app-filter-episodes',
+  templateUrl: './filter-episodes.component.html',
+  styleUrls: ['./filter-episodes.component.scss'],
 })
-export class FilterLocationsComponent implements OnInit, OnDestroy {
-  isFetching: boolean = false;
-  locations: any[] = [];
+export class FilterEpisodesComponent implements OnInit, OnDestroy {
+  episodes: any[] = [];
   nextPage: string;
+  loading: boolean = false;
   error: boolean = false;
-  form: FormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    type: new FormControl(''),
-    dimension: new FormControl(''),
-  });
   filterValue: string;
-  handleNewValue: string;
+  form: FormGroup = new FormGroup({
+    name: new FormControl(''),
+    episode: new FormControl(''),
+  });
   subscription: Subscription;
+  handleNewValue: string;
   handlerSplitted: string[];
   listToDisplay: string = 'Todos';
   favoritedsIds: number[] =
-    JSON.parse(localStorage.getItem('ids_favoritos_local')) ?? [];
-  favoritedLocations: LocationRickMorty[] =
-    JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
+    JSON.parse(localStorage.getItem('ids_favoritos_eps')) ?? [];
+  favoritedEps: Episode[] =
+    JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -42,16 +41,9 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     const margin = 300;
 
     if (scrollY + windowHeight >= documentHeight - margin) {
-      if (!this.nextPage || this.isFetching) return;
-
-      this.isFetching = true;
-
-      new Promise<void>((resolve) => {
-        this.fetchPages(this.nextPage);
-        resolve(); // Resolve the Promise immediately
-      }).then(() => {
-        this.isFetching = false;
-      });
+      if (!this.nextPage) return;
+      this.loading = true;
+      this.fetchPages(this.nextPage), { eventEmitter: false };
     }
   }
 
@@ -73,61 +65,61 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
         if (value) {
           const splitted = value.split(':');
           this.handlerSplitted = splitted;
-          const location: LocationRickMorty = {
+          const episode: Episode = {
             [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
           };
-          this.filter(location);
-          this.handleNewValue = JSON.stringify(location);
+          this.filter(episode);
+          this.handleNewValue = JSON.stringify(episode);
         } else {
-          this.getInitialLocations();
+          this.getInitialEpisodes();
         }
       });
     this.filterService.sendListPage(true);
   }
 
-  getInitialLocations() {
-    this.locations = [];
-    this.rickMortyService.getAllLocations().subscribe((data) => {
+  getInitialEpisodes() {
+    this.episodes = [];
+    this.rickMortyService.getAllEpisodes().subscribe((data) => {
       this.nextPage = data.info.next;
       data.results.forEach((result) => {
-        this.locations.push(result);
+        this.episodes.push(result);
       });
     });
   }
 
   filterByForm() {
-    const location: LocationRickMorty = {
+    const episode: Episode = {
       name: this.form.get('name').value,
-      type: this.form.get('type').value ?? null,
-      dimension: this.form.get('dimension').value ?? null,
+      episode: this.form.get('episode').value,
     };
-    this.filter(location);
+    this.filter(episode);
   }
 
-  filter(locations: LocationRickMorty) {
+  filter(episodes: Episode) {
     this.error = false;
-    this.locations = [];
+    this.episodes = [];
     this.rickMortyService
-      .filterLocations(locations)
+      .filterEpisodes(episodes)
       .pipe(
         catchError((error) => {
           this.error = true;
+          console.log(this.error);
           this.nextPage = '';
           return EMPTY;
         })
       )
       .subscribe((data) => {
-        this.locations = [];
-        data.results.forEach((result) => this.locations.push(result));
+        this.episodes = [];
+        data.results.forEach((result) => this.episodes.push(result));
         this.nextPage = data.info.next;
       });
   }
 
   fetchPages(url: string) {
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
-      data.results.forEach((result: LocationRickMorty) => {
-        if (this.locations.includes(result.name)) return;
-        this.locations.push(result);
+      data.results.forEach((result: Episode) => {
+        if (this.episodes.includes(result.name)) return;
+        this.episodes.push(result);
       });
       this.nextPage = data.info.next;
       if (!data.info.next) {
@@ -138,58 +130,43 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
 
   favorited(id: number) {
     this.favoritedsIds.push(id);
-    const location = this.locations.find((location) => location.id === id);
-    this.favoritedLocations.push(location);
-    this.snackBar.open(`${location.name} favoritado!`, 'X');
+    const episode = this.episodes.find((episode) => episode.id === id);
+    this.favoritedEps.push(episode);
+    this.snackBar.open(`${episode.name} favoritado!`, 'X', {duration: 1000});
     this.setLocalStorage();
   }
 
   unfavorited(id: number) {
-    const location = this.favoritedLocations.find(
-      (location) => location.id === id
-    );
+    const ep = this.favoritedEps.find((ep) => ep.id === id);
     this.favoritedsIds = this.favoritedsIds.filter((ids) => ids !== id);
     const control: any[] = [];
-    this.favoritedLocations.forEach((location) =>
-      location.id !== id ? control.push(location) : ''
+    this.favoritedEps.forEach((char) =>
+      char.id !== id ? control.push(char) : ''
     );
-    this.favoritedLocations = control;
-    this.snackBar.open(`${location.name} desfavoritado!`, 'X');
+    this.favoritedEps = control;
+    this.snackBar.open(`${ep.name} desfavoritado!`, 'X', {duration: 1000});
     this.setLocalStorage();
   }
 
   setLocalStorage() {
     localStorage.setItem(
-      'ids_favoritos_local',
+      'ids_favoritos_eps',
       JSON.stringify(this.favoritedsIds)
     );
-    localStorage.setItem(
-      'favoritos_local',
-      JSON.stringify(this.favoritedLocations)
-    );
-  }
-
-  reset() {
-    this.form.reset();
-    this.getInitialLocations();
-  }
-
-  getStatus(status: string) {
-    if (status.toLowerCase() === 'alive') {
-      return 'green';
-    } else if (status.toLowerCase() === 'dead') {
-      return 'red';
-    } else {
-      return 'grey';
-    }
+    localStorage.setItem('favoritos_eps', JSON.stringify(this.favoritedEps));
   }
 
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
   }
 
-  redirectToLocation(id: number) {
-    this.router.navigate([`localizacao/${id}`]);
+  reset() {
+    this.form.reset();
+    this.getInitialEpisodes();
+  }
+
+  redirectToEpisode(id: number) {
+    this.router.navigate([`episodio/${id}`]);
   }
 
   back() {
