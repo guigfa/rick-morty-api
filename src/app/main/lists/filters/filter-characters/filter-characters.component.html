@@ -1,0 +1,128 @@
+<div class="container">
+  <div
+    class="w-100 d-flex flex-column align-items-center"
+    style="margin-top: 6rem"
+  >
+    <span class="fs-2 p-3">Personagens</span>
+    <mat-button-toggle-group
+      style="width: fit-content"
+      (change)="setList($event)"
+    >
+      <mat-button-toggle value="Favoritos"> Favoritos </mat-button-toggle>
+      <mat-button-toggle value="Todos"> Todos </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <form
+    class="example-section"
+    [formGroup]="form"
+    class="w-50"
+    style="margin: 2rem auto"
+  >
+    <div class="d-flex flex-column align-items-start">
+      <div class="form-field">
+        <mat-form-field>
+          <mat-label>Personagens</mat-label>
+          <input matInput appaerance="outline" formControlName="name" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Gênero</mat-label>
+          <mat-select appaerance="outline" formControlName="gender">
+            <mat-option [value]="null">Limpar</mat-option>
+            <mat-option value="female">Fêmea</mat-option>
+            <mat-option value="male">Macho</mat-option>
+            <mat-option value="genderless">Sem gênero</mat-option>
+            <mat-option value="unknown">Desconhecido </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select appaerance="outline" formControlName="status">
+            <mat-option [value]="null">Limpar</mat-option>
+            <mat-option value="alive">Vivo</mat-option>
+            <mat-option value="dead">Morto</mat-option>
+            <mat-option value="unknown">Desconhecido</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          class="p3"
+          [disabled]="!form.valid"
+          (click)="filterByForm()"
+        >
+          Filtrar!
+        </button>
+      </div>
+      <div class="d-flex gap-3 justify-content-center" style="margin: 0 auto">
+        <button color="warn" mat-raised-button (click)="back()">Voltar</button>
+        <button mat-stroked-button (click)="reset()">Limpar filtros</button>
+      </div>
+    </div>
+  </form>
+  <div
+    class="row d-flex align-items-center justify-content-center card-div main"
+  >
+    <ng-container
+      *ngIf="favoritedsIds.length === 0 && listToDisplay === 'Favoritos'"
+    >
+      Você não favoritou nenhum personagem!
+    </ng-container>
+    <ng-container
+      *ngFor="
+        let character of listToDisplay === 'Todos' ? characters : favoritedChars
+      "
+    >
+      <mat-card class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm characters-card">
+        <div class="d-flex w-100">
+          <img class="image" [src]="character.image" />
+          <div class="d-flex justify-content-between w-100">
+            <div class="d-flex flex-column gap-4 pt-3">
+              <span class="fs-3">{{ character.name }}</span>
+              <div class="d-flex align-items-center gap-2">
+                <div
+                  class="status rounded-circle"
+                  [ngClass]="getStatus(character.status)"
+                ></div>
+                <span class="subtitle"
+                  >{{ character.status }} - {{ character.species }}</span
+                >
+              </div>
+              <div class="d-flex flex-column">
+                <span style="color: darkgray"> Residente de: </span>
+                <span> {{ character.location.name }} </span>
+              </div>
+            </div>
+            <div class="d-flex flex-column justify-content-between p-2">
+              <mat-icon
+                style="color: white"
+                (click)="redirectToCharacter(character.id)"
+                class="mr-20"
+                >add_circle_outline</mat-icon
+              >
+              <mat-icon
+                (click)="favorited(character.id)"
+                *ngIf="!favoritedsIds.includes(character.id)"
+                >star_border</mat-icon
+              >
+              <mat-icon
+                class="rounded-circle p-12"
+                style="color: yellow"
+                (click)="unfavorited(character.id)"
+                *ngIf="favoritedsIds.includes(character.id)"
+                >star</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="error" class="">
+    <div class="text-center w-100">
+      <span
+        >Não foi encontrado nenhum personagem com essas características!</span
+      >
+    </div>
+  </ng-container>
+</div>

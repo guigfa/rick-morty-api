@@ -1,0 +1,47 @@
+.image {
+  height: 40%;
+  width: 40%;
+  margin-right: 20px;
+  border-radius: 2px;
+}
+
+.card-div {
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.characters-card {
+  padding: 5px 5px 0 5px;
+}
+
+.subtitle {
+  font-size: 15px;
+}
+
+.form-field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 690px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .characters-card {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+}

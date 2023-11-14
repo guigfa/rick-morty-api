@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   title = 'rick-morty-test';
 
   constructor(
-  ) {sessionStorage.setItem('user', 'Rick')}
+  ) {}
 
   ngOnInit(): void {}
 }

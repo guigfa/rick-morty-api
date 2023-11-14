@@ -1,0 +1,24 @@
+<mat-toolbar
+  
+  class="text-center d-flex align-items-center toolbar"
+>
+<form [formGroup]="form">
+  <div class="fs-3 d-flex align-items-center gap-3 mt-5 w-100">
+    <span class="fs-6">Filtro global</span>
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          formControlName="value"
+          class="fs-5"
+          #input
+          placeholder="Digite aqui um nome"
+          maxlength="12"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <button class="p-4 mb-4" mat-stroked-button color="primary" (click)="input.value = null">
+        Limpar
+      </button>
+    </div>
+  </form>
+</mat-toolbar>

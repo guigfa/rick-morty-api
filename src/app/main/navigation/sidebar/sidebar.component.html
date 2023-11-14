@@ -1,0 +1,88 @@
+<div class="" style="position: relative">
+  <app-toolbar *ngIf="isListPage" class="toolbar"></app-toolbar>
+
+  <mat-sidenav-container class="drawer-container">
+    <mat-sidenav
+      #sidenav
+      [autoFocus]="false"
+      opened="false"
+      [mode]="updateMode()"
+    >
+      <div class="d-flex title">
+        <span class="fs-4 p-4 pb-0">Rick & Morty API</span>
+        <div style="height: 1px; background-color: white"></div>
+      </div>
+      <hr />
+      <mat-nav-list class="margin-list">
+        <mat-list-item class="mat-list-item" (click)="redirectTo('usuario')">
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>person</mat-icon>
+            <span>Página do usuário</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item (click)="redirectTo('')" class="mat-list-item">
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>home</mat-icon>
+            <span>Pagina Inicial</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item class="mat-list-item" (click)="redirectTo('filtrar')">
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>list</mat-icon>
+            <span>Listagem Simplificada</span>
+          </div>
+        </mat-list-item>
+        <hr>
+        <mat-list-item class="mat-list-item" (click)="redirectTo('personagens')"
+        >
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>face</mat-icon>
+            <span>Personagens</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item class="mat-list-item" (click)="redirectTo('localizacoes')"
+        >
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>location_on</mat-icon>
+            <span>Locais</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item class="mat-list-item" (click)="redirectTo('episodios')">
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>book</mat-icon>
+            <span>Episódios</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item class="mat-list-item" (click)="redirectTo('quiz')">
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>question_answer</mat-icon>
+            <span>Quiz</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item class="mat-list-item" (click)="redirectTo('favoritos')">
+          <div class="d-flex align-items-start gap-1">
+            <mat-icon>star</mat-icon>
+            <span>Favoritos</span>
+          </div>
+        </mat-list-item>
+        <div class="d-flex justify-content-center h-100 align-items-end mt-5 pt-5">
+          <button mat-raised-button color="warn" (click)="logout()">Logout</button>
+        </div>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet>
+        <div class="button">
+          <button
+            mat-stroked-button
+            class="toggle-button d-flex justify-content-center"
+            (click)="sidenav.toggle()"
+            *ngIf="!login"
+          >
+            <mat-icon class="m-0">menu</mat-icon>
+          </button>
+        </div>
+      </router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
