@@ -9,7 +9,7 @@
         <div class="d-flex align-items-baseline gap-2">
           <span class="fs-4">Criado em:</span>
           <span class="subtitle">{{
-            location.created | date : "dd/MM/yy"
+            location?.created | date : "dd/MM/yy"
           }}</span>
         </div>
         <div class="d-flex align-items-baseline gap-2">
@@ -48,7 +48,7 @@
                     <div class="d-flex align-items-center gap-2">
                       <div
                         class="status rounded-circle"
-                        [ngClass]="getStatus(character.status)"
+                        [ngClass]="getStatus(character?.status)"
                       ></div>
                       <span class="subtitle"
                         >{{ character.status }} - {{ character.species }}</span

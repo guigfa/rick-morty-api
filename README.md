@@ -27,3 +27,5 @@ git clone https://github.com/guigfa/rick-morty-api
 ```console
 - ng serve
 ```
+
+3. No seu navegador, acesse o site pelo link: https://localhost:4200/
