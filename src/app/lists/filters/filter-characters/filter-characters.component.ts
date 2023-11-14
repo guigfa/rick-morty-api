@@ -69,6 +69,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
           const character: Character = {
             [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
           };
+          console.log(splitted)
           this.filter(character);
           this.handleNewValue = JSON.stringify(character);
         } else {
@@ -105,13 +106,14 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
       .pipe(
         catchError((error) => {
           this.error = true;
-          console.log(this.error);
+          this.characters = [];
           this.nextPage = '';
           return EMPTY;
         })
       )
       .subscribe((data) => {
         this.characters = [];
+        console.log(data.results)
         data.results.forEach((result) => this.characters.push(result));
         this.nextPage = data.info.next;
       });

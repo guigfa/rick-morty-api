@@ -112,6 +112,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
       .pipe(
         catchError((error) => {
           this.error = true;
+          this.locations = [];
           this.nextPage = '';
           return EMPTY;
         })

@@ -103,7 +103,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
       .pipe(
         catchError((error) => {
           this.error = true;
-          console.log(this.error);
+          this.episodes = [];
           this.nextPage = '';
           return EMPTY;
         })

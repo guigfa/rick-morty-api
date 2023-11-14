@@ -1,0 +1,25 @@
+.card {
+    max-height: 450px;
+  }
+  
+  .title,
+  mat-icon {
+    color: white;
+  }
+  
+  .scroll {
+    overflow-y: auto;
+    padding-right: 0.5rem;
+  }
+  
+  .column {
+    align-items: start;
+  }
+  
+  @media (max-width: 690px) {
+    .main {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  
