@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './main/login-page/login-page.component';
 import { AuthGuard } from './shared/guard.guard';
-import { MainPageComponent } from './main/main-page/main-page.component';
+import { HomeComponent } from './main/home/home.component';
 import { QuizComponent } from './main/quiz/quiz.component';
 import { UserPageComponent } from './main/user-page/user-page.component';
 import { FavoritedsComponent } from './main/lists/favoriteds/favoriteds.component';
@@ -10,7 +10,7 @@ import { FavoritedsComponent } from './main/lists/favoriteds/favoriteds.componen
 const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-  { path: 'inicio', component: MainPageComponent, canActivate: [AuthGuard] },
+  { path: 'inicio', component: HomeComponent, canActivate: [AuthGuard] },
   {
     path: 'filtrar',
     loadChildren: () =>

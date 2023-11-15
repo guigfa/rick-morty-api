@@ -9,7 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './shared/material.module';
 import { FiltersComponent } from './main/lists/filters/filters.component';
 import { FilterCharactersComponent } from './main/lists/filters/filter-characters/filter-characters.component';
-import { MainPageComponent } from './main/main-page/main-page.component';
+import { HomeComponent } from './main/home/home.component';
 import { DetailedCharacterComponent } from './main/lists/detailed-content/detailed-character/detailed-character.component';
 import { DetailedEpisodeComponent } from './main/lists/detailed-content/detailed-episode/detailed-episode.component';
 import { DetailedLocationComponent } from './main/lists/detailed-content/detailed-location/detailed-location.component';
@@ -32,7 +32,7 @@ import { TranslateTypePipe } from './shared/pipes/translate-type.pipe';
     AppComponent,
     FiltersComponent,
     FilterCharactersComponent,
-    MainPageComponent,
+    HomeComponent,
     ToolbarComponent,
     FilterEpisodesComponent,
     FilterLocationsComponent,

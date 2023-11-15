@@ -133,11 +133,11 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
         this.episodes.push(result);
       });
       this.nextPage = data.info.next;
+      this.dataSource = [...this.episodes];
       if (!data.info.next) {
         return;
       }
     });
-    this.dataSource = [...this.episodes];
   }
 
   favorited(id: number) {
@@ -184,6 +184,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   }
 
   favoriteFilterByForm(episode: Episode) {
+    this.error = false;
     this.favoritedEps = JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
     this.favoritedEps = this.favoritedEps.filter((ep) =>
       episode.episode

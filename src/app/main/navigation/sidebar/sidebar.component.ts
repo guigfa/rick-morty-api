@@ -14,14 +14,19 @@ export class SidebarComponent implements OnInit {
   mode: string;
   login: boolean;
 
-  constructor(private router: Router, private filterService: FilterService, private authService: AuthService, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private router: Router,
+    private filterService: FilterService,
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.filterService.isListPage$.subscribe((val) => (this.isListPage = val));
   }
 
   ngOnInit(): void {
     this.updateMode();
     window.addEventListener('resize', () => this.updateMode());
-    this.filterService.getLoginPage().subscribe(val => this.login = val);
+    this.filterService.getLoginPage().subscribe((val) => (this.login = val));
   }
 
   updateMode() {
@@ -40,6 +45,7 @@ export class SidebarComponent implements OnInit {
   }
 
   logout() {
-      this.router.navigate(['login']);
+    this.router.navigate(['login']);
+    window.location.reload();
   }
 }

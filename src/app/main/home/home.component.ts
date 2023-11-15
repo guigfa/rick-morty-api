@@ -4,10 +4,10 @@ import { FilterService } from 'src/app/shared/services/filter.service';
 
 @Component({
   selector: 'app-main-page',
-  templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.scss'],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class MainPageComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   constructor(private router: Router, private filterService: FilterService) {
     this.handleFilters();
   }

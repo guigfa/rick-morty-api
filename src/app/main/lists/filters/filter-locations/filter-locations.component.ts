@@ -148,11 +148,11 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
         this.locations.push(result);
       });
       this.nextPage = data.info.next;
+      this.dataSource = [...this.locations];
       if (!data.info.next) {
         return;
       }
     });
-    this.dataSource = [...this.locations];
   }
 
   favorited(id: number) {
@@ -216,6 +216,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   }
 
   favoriteFilterByForm(location: LocationRickMorty) {
+    this.error = false;
     this.favoritedLocations =
       JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
     this.favoritedLocations = this.favoritedLocations.filter((loc) =>

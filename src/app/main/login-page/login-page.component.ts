@@ -51,6 +51,7 @@ export class LoginPageComponent implements OnInit {
     );
 
     this.filterService.setLoginPage(true);
+    this.filterService.sendListPage(false);
   }
 
   onImageClick(index: number) {

@@ -148,11 +148,11 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
         this.characters.push(result);
       });
       this.nextPage = data.info.next;
+      this.dataSource = [...this.characters];
       if (!data.info.next) {
         return;
       }
     });
-    this.dataSource = [...this.characters];
   }
 
   favorited(id: number) {
@@ -194,6 +194,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     this.form.reset();
     this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
     this.getInitialCharacters();
+    this.error = false;
   }
 
   getStatus(status: string) {
@@ -214,6 +215,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   }
 
   favoriteFilterByForm(character: Character) {
+    this.error = false;
     this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
     this.favoritedChars = this.favoritedChars.filter(
       (char) =>
