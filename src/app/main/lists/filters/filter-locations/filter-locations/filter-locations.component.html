@@ -4,100 +4,117 @@
     style="margin-top: 6rem"
   >
     <span class="fs-2 p-3">Localizações</span>
-    <mat-button-toggle-group
-      style="width: fit-content"
-      (change)="setList($event)"
-    >
-      <mat-button-toggle value="Favoritos"> Favoritos </mat-button-toggle>
-      <mat-button-toggle value="Todos"> Todos </mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-  <form
-    class="example-section"
-    [formGroup]="form"
-    class="w-50"
-    style="margin: 2rem auto"
-  >
-    <div class="d-flex flex-column align-items-center">
-      <div class="form-field">
-        <mat-form-field>
-          <mat-label>Nome</mat-label>
-          <input appaerance="outline" matInput formControlName="name" />
-        </mat-form-field>
-        <button
-          mat-raised-button
-          color="primary"
-          class="p3"
-          [disabled]="!form.valid"
-          (click)="filterByForm()"
-        >
-          Filtrar!
-        </button>
-      </div>
-      <div class="d-flex gap-3 justify-content-center" style="margin: 0 auto">
-        <button color="warn" mat-raised-button (click)="back()">Voltar</button>
-        <button mat-stroked-button (click)="reset()">Limpar filtros</button>
-      </div>
+    <div class="d-flex gap-5">
+      <mat-button-toggle-group
+        style="width: fit-content"
+        (change)="setMode($event)"
+        value="card"
+      >
+        <mat-button-toggle value="table"> Tabela </mat-button-toggle>
+        <mat-button-toggle value="card"> Cards </mat-button-toggle>
+      </mat-button-toggle-group>
+      <mat-button-toggle-group
+        value="Todos"
+        style="width: fit-content"
+        (change)="setList($event)"
+      >
+        <mat-button-toggle value="Favoritos"> Favoritos </mat-button-toggle>
+        <mat-button-toggle value="Todos"> Todos </mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
-  </form>
-  <div
-    class="row d-flex align-items-center justify-content-center card-div main"
-  >
-    <ng-container
-      *ngIf="favoritedsIds.length === 0 && listToDisplay === 'Favoritos'"
+    <form
+      class="example-section"
+      [formGroup]="form"
+      class="w-50"
+      style="margin: 2rem auto"
     >
-      Você não favoritou nenhuma localização!
-    </ng-container>
-    <ng-container
-      *ngFor="
-        let location of listToDisplay === 'Todos'
-          ? locations
-          : favoritedLocations
-      "
+      <div class="d-flex flex-column align-items-center">
+        <div class="form-field">
+          <mat-form-field>
+            <mat-label>Nome</mat-label>
+            <input appaerance="outline" matInput formControlName="name" />
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="primary"
+            class="p3"
+            [disabled]="!form.valid"
+            (click)="filterByForm()"
+          >
+            Filtrar!
+          </button>
+        </div>
+        <div class="d-flex gap-3 justify-content-center" style="margin: 0 auto">
+          <button color="warn" mat-raised-button (click)="back()">
+            Voltar
+          </button>
+          <button mat-stroked-button (click)="reset()">Limpar filtros</button>
+        </div>
+      </div>
+    </form>
+    <div
+      class="row d-flex align-items-center justify-content-center card-div main"
     >
-      <mat-card class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm characters-card">
-        <div class="d-flex w-100">
-          <div class="d-flex justify-content-between w-100">
-            <div class="d-flex flex-column gap-3 column">
-              <span class="fs-3">{{ location.name }}</span>
-              <div class="d-flex flex-column gap-1">
-                <span style="color: darkgray">Dimensão:</span>
-                <span>{{ location.dimension }}</span>
+      <ng-container
+        *ngIf="favoritedsIds.length === 0 && listToDisplay === 'Favoritos'"
+      >
+        Você não favoritou nenhuma localização!
+      </ng-container>
+      <ng-container
+        *ngFor="
+          let location of listToDisplay === 'Todos'
+            ? locations
+            : favoritedLocations
+        "
+      >
+        <mat-card
+          class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm characters-card"
+        >
+          <div class="d-flex w-100">
+            <div class="d-flex justify-content-between w-100">
+              <div class="d-flex flex-column gap-3 column">
+                <span class="fs-3">{{ location?.name }}</span>
+                <div class="d-flex flex-column gap-1">
+                  <span style="color: darkgray">Dimensão:</span>
+                  <span>{{ location?.dimension }}</span>
+                </div>
+                <div class="d-flex flex-column gap-1">
+                  <span style="color: darkgray">Tipo:</span>
+                  <span>{{ location?.type }}</span>
+                </div>
               </div>
-              <div class="d-flex flex-column gap-1">
-                <span style="color: darkgray">Tipo:</span>
-                <span>{{ location.type }}</span>
+              <div class="d-flex flex-column justify-content-between p-2">
+                <mat-icon
+                  style="color: white"
+                  (click)="redirectToLocation(location?.id)"
+                  class="mr-20"
+                  >add_circle_outline</mat-icon
+                >
+                <mat-icon
+                  (click)="favorited(location.id)"
+                  *ngIf="!favoritedsIds.includes(location?.id)"
+                  >star_border</mat-icon
+                >
+                <mat-icon
+                  class="rounded-circle p-12"
+                  style="color: yellow"
+                  (click)="unfavorited(location?.id)"
+                  *ngIf="favoritedsIds.includes(location?.id)"
+                  >star</mat-icon
+                >
               </div>
-            </div>
-            <div class="d-flex flex-column justify-content-between p-2">
-              <mat-icon
-                style="color: white"
-                (click)="redirectToLocation(location.id)"
-                class="mr-20"
-                >add_circle_outline</mat-icon
-              >
-              <mat-icon
-                (click)="favorited(location.id)"
-                *ngIf="!favoritedsIds.includes(location.id)"
-                >star_border</mat-icon
-              >
-              <mat-icon
-                class="rounded-circle p-12"
-                style="color: yellow"
-                (click)="unfavorited(location.id)"
-                *ngIf="favoritedsIds.includes(location.id)"
-                >star</mat-icon
-              >
             </div>
           </div>
-        </div>
-      </mat-card>
+        </mat-card>
+      </ng-container>
+    </div>
+
+    <ng-container *ngIf="error" class="">
+      <div class="text-center w-100">
+        <span
+          >Não foi encontrado nenhum episódio com essas características!</span
+        >
+      </div>
     </ng-container>
   </div>
-
-  <ng-container *ngIf="error" class="">
-    <div class="text-center w-100">
-      <span>Não foi encontrado nenhum episódio com essas características!</span>
-    </div>
-  </ng-container>
 </div>

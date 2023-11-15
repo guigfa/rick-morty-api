@@ -4,13 +4,24 @@
     style="margin-top: 6rem"
   >
     <span class="fs-2 p-3">Personagens</span>
-    <mat-button-toggle-group
-      style="width: fit-content"
-      (change)="setList($event)"
-    >
-      <mat-button-toggle value="Favoritos"> Favoritos </mat-button-toggle>
-      <mat-button-toggle value="Todos"> Todos </mat-button-toggle>
-    </mat-button-toggle-group>
+    <div class="d-flex gap-5">
+      <mat-button-toggle-group
+        value="Todos"
+        style="width: fit-content"
+        (change)="setList($event)"
+      >
+        <mat-button-toggle value="Favoritos"> Favoritos </mat-button-toggle>
+        <mat-button-toggle value="Todos"> Todos </mat-button-toggle>
+      </mat-button-toggle-group>
+      <mat-button-toggle-group
+        value="card"
+        style="width: fit-content"
+        (change)="setMode($event)"
+      >
+        <mat-button-toggle value="table"> Tabela </mat-button-toggle>
+        <mat-button-toggle value="card"> Card </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
   </div>
   <form
     class="example-section"
@@ -59,66 +70,164 @@
       </div>
     </div>
   </form>
+
+  <ng-container
+    *ngIf="favoritedsIds.length === 0 && listToDisplay === 'Favoritos'"
+  >
+    <div class="d-flex justify-content-center">
+      Você não favoritou nenhum personagem!
+    </div>
+  </ng-container>
+  <ng-container *ngIf="modeToDisplay === 'table'">
+    <mat-table
+      [dataSource]="listToDisplay === 'Todos' ? dataSource : favoritedChars"
+    >
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "Nome" }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row?.name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "Status - Espécie" }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <div class="d-flex gap-1 align-items-center">
+            <div
+              class="status rounded-circle"
+              [ngClass]="getStatus(row?.status)"
+            ></div>
+            {{ row?.status }} - {{ row?.species }}
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="gender">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "Gênero" }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row?.gender }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="origin">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "Residente" }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row?.origin?.name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="created">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "Criado em" }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row?.created | date : "dd/MM/yy" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="favorited">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "Favoritar" }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-icon
+            (click)="favorited(row?.id)"
+            *ngIf="!favoritedsIds.includes(row?.id)"
+            >star_border</mat-icon
+          >
+          <mat-icon
+            class="rounded-circle p-12"
+            style="color: yellow"
+            (click)="unfavorited(row?.id)"
+            *ngIf="favoritedsIds.includes(row?.id)"
+            >star</mat-icon
+          >
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="redirect">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ "Redirecionar" }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-icon
+            style="color: white"
+            (click)="redirectToCharacter(row?.id)"
+            class="mr-20"
+            >add_circle_outline</mat-icon
+          >
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </mat-table>
+  </ng-container>
   <div
     class="row d-flex align-items-center justify-content-center card-div main"
   >
-    <ng-container
-      *ngIf="favoritedsIds.length === 0 && listToDisplay === 'Favoritos'"
+    <div
+      class="row d-flex align-items-center justify-content-center card-div main"
+      *ngIf="modeToDisplay === 'card'"
     >
-      Você não favoritou nenhum personagem!
-    </ng-container>
-    <ng-container
-      *ngFor="
-        let character of listToDisplay === 'Todos' ? characters : favoritedChars
-      "
-    >
-      <mat-card class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm characters-card">
-        <div class="d-flex w-100">
-          <img class="image" [src]="character.image" />
-          <div class="d-flex justify-content-between w-100">
-            <div class="d-flex flex-column gap-4 pt-3">
-              <span class="fs-3">{{ character.name }}</span>
-              <div class="d-flex align-items-center gap-2">
-                <div
-                  class="status rounded-circle"
-                  [ngClass]="getStatus(character?.status)"
-                ></div>
-                <span class="subtitle"
-                  >{{ character?.status }} - {{ character?.species }}</span
+      <ng-container
+        *ngFor="
+          let character of listToDisplay === 'Todos'
+            ? characters
+            : favoritedChars
+        "
+      >
+        <mat-card
+          class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm characters-card"
+        >
+          <div class="d-flex w-100">
+            <img class="image" [src]="character?.image" />
+            <div class="d-flex justify-content-between w-100">
+              <div class="d-flex flex-column gap-4 pt-3">
+                <span class="fs-3">{{ character?.name }}</span>
+                <div class="d-flex align-items-center gap-2">
+                  <div
+                    class="status rounded-circle"
+                    [ngClass]="getStatus(character?.status)"
+                  ></div>
+                  <span class="subtitle"
+                    >{{ character?.status }} - {{ character?.species }}</span
+                  >
+                </div>
+                <div class="d-flex flex-column">
+                  <span style="color: darkgray"> Residente de: </span>
+                  <span> {{ character?.location?.name }} </span>
+                </div>
+              </div>
+              <div class="d-flex flex-column justify-content-between p-2">
+                <mat-icon
+                  style="color: white"
+                  (click)="redirectToCharacter(character?.id)"
+                  class="mr-20"
+                  >add_circle_outline</mat-icon
+                >
+                <mat-icon
+                  (click)="favorited(character.id)"
+                  *ngIf="!favoritedsIds.includes(character?.id)"
+                  >star_border</mat-icon
+                >
+                <mat-icon
+                  class="rounded-circle p-12"
+                  style="color: yellow"
+                  (click)="unfavorited(character.id)"
+                  *ngIf="favoritedsIds.includes(character?.id)"
+                  >star</mat-icon
                 >
               </div>
-              <div class="d-flex flex-column">
-                <span style="color: darkgray"> Residente de: </span>
-                <span> {{ character.location.name }} </span>
-              </div>
-            </div>
-            <div class="d-flex flex-column justify-content-between p-2">
-              <mat-icon
-                style="color: white"
-                (click)="redirectToCharacter(character.id)"
-                class="mr-20"
-                >add_circle_outline</mat-icon
-              >
-              <mat-icon
-                (click)="favorited(character.id)"
-                *ngIf="!favoritedsIds.includes(character.id)"
-                >star_border</mat-icon
-              >
-              <mat-icon
-                class="rounded-circle p-12"
-                style="color: yellow"
-                (click)="unfavorited(character.id)"
-                *ngIf="favoritedsIds.includes(character.id)"
-                >star</mat-icon
-              >
             </div>
           </div>
-        </div>
-      </mat-card>
-    </ng-container>
+        </mat-card>
+      </ng-container>
+    </div>
   </div>
 
-  <ng-container *ngIf="error" class="">
+  <ng-container *ngIf="error">
     <div class="text-center w-100">
       <span
         >Não foi encontrado nenhum personagem com essas características!</span

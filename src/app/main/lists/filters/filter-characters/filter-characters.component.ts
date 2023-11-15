@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -31,6 +31,17 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   handlerSplitted: string[];
   listToDisplay: string = 'Todos';
+  modeToDisplay: string = 'card';
+  displayedColumns = [
+    'name',
+    'status',
+    'gender',
+    'origin',
+    'created',
+    'favorited',
+    'redirect'
+  ];
+  dataSource: Character[] = [];
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -51,7 +62,8 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     private rickMortyService: RickMortyService,
     private router: Router,
     private filterService: FilterService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +96,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
         this.characters.push(result);
         this.nextPage = data.info.next;
       });
+      this.dataSource = [...this.characters];
     });
   }
 
@@ -113,10 +126,12 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
         this.characters = [];
         data.results.forEach((result) => this.characters.push(result));
         this.nextPage = data.info.next;
+        this.dataSource = [...this.characters]
       });
   }
 
   fetchPages(url: string) {
+    if(this.listToDisplay === 'Favoritos') return;
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: Character) => {
         if (this.characters.includes(result.name)) return;
@@ -127,6 +142,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
         return;
       }
     });
+    this.dataSource = [...this.characters]
   }
 
   favorited(id: number) {
@@ -180,6 +196,10 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
   }
+
+  setMode(event: any) {
+    this.modeToDisplay = event.value === 'table' ? 'table' : 'card';
+  };
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

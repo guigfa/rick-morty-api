@@ -20,7 +20,7 @@
         </div>
         <div class="d-flex align-items-baseline gap-2">
           <span class="fs-4">Tipo:</span>
-          <span class="subtitle">{{ location.type }}</span>
+          <span class="subtitle">{{ location?.type }}</span>
         </div>
       </div>
     </div>
@@ -41,17 +41,17 @@
               class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm w-100 characters-card"
             >
               <div class="d-flex w-100">
-                <img class="image" [src]="character.image" />
+                <img class="image" [src]="character?.image" />
                 <div class="d-flex justify-content-between w-100">
                   <div class="d-flex flex-column gap-4 pt-3">
-                    <span class="fs-3">{{ character.name }}</span>
+                    <span class="fs-3">{{ character?.name }}</span>
                     <div class="d-flex align-items-center gap-2">
                       <div
                         class="status rounded-circle"
                         [ngClass]="getStatus(character?.status)"
                       ></div>
                       <span class="subtitle"
-                        >{{ character.status }} - {{ character.species }}</span
+                        >{{ character?.status }} - {{ character?.species }}</span
                       >
                     </div>
                     <div class="d-flex flex-column">

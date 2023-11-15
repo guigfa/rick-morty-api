@@ -25,11 +25,14 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   handleNewValue: string;
   handlerSplitted: string[];
-  listToDisplay: string = 'Todos';
+  listToDisplay: string;
+  modeToDisplay: string;
   favoritedsIds: number[] =
     JSON.parse(localStorage.getItem('ids_favoritos_eps')) ?? [];
   favoritedEps: Episode[] =
     JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
+  
+  dataSource: Episode[] = [];
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -83,6 +86,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
       data.results.forEach((result) => {
         this.episodes.push(result);
       });
+      this.dataSource = [...this.episodes];
     });
   }
 
@@ -111,10 +115,12 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
         this.episodes = [];
         data.results.forEach((result) => this.episodes.push(result));
         this.nextPage = data.info.next;
+        this.dataSource = [...this.episodes];
       });
   }
 
   fetchPages(url: string) {
+    if(this.listToDisplay === 'Favoritos') return;
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: Episode) => {
         if (this.episodes.includes(result.name)) return;
@@ -125,6 +131,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
         return;
       }
     });
+    this.dataSource = [...this.episodes];
   }
 
   favorited(id: number) {
@@ -157,6 +164,10 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
 
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
+  }
+
+  setMode(event: any) {
+    this.modeToDisplay = event.value === 'table' ? 'table' : 'card';
   }
 
   reset() {

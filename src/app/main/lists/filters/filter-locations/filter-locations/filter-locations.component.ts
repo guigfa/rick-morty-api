@@ -26,11 +26,14 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   handleNewValue: string;
   subscription: Subscription;
   handlerSplitted: string[];
-  listToDisplay: string = 'Todos';
+  listToDisplay: string;
+  modeToDisplay: string;
   favoritedsIds: number[] =
     JSON.parse(localStorage.getItem('ids_favoritos_local')) ?? [];
   favoritedLocations: LocationRickMorty[] =
     JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
+
+  dataSource: LocationRickMorty[] = [];
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -91,6 +94,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
       data.results.forEach((result) => {
         this.locations.push(result);
       });
+      this.dataSource = [...this.locations];
     });
   }
 
@@ -120,10 +124,12 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
         this.locations = [];
         data.results.forEach((result) => this.locations.push(result));
         this.nextPage = data.info.next;
+        this.dataSource = [...this.locations];
       });
   }
 
   fetchPages(url: string) {
+    if(this.listToDisplay === 'Favoritos') return;
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: LocationRickMorty) => {
         if (this.locations.includes(result.name)) return;
@@ -134,6 +140,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
         return;
       }
     });
+    this.dataSource = [...this.locations];
   }
 
   favorited(id: number) {
@@ -186,6 +193,10 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
 
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
+  }
+
+  setMode(event: any) {
+    this.modeToDisplay = event.value === 'table' ? 'table' : 'card';
   }
 
   redirectToLocation(id: number) {
