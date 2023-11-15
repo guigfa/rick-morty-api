@@ -19,8 +19,8 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   error: boolean = false;
   filterValue: string;
   form: FormGroup = new FormGroup({
-    name: new FormControl(''),
-    episode: new FormControl(''),
+    name: new FormControl(null),
+    episode: new FormControl(null),
   });
   subscription: Subscription;
   handleNewValue: string;
@@ -100,6 +100,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
       episode: this.form.get('episode').value,
     };
     this.filter(episode);
+    this.favoriteFilterByForm(episode);
   }
 
   filter(episodes: Episode) {
@@ -176,22 +177,31 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   }
 
   favoriteFilter(name: string) {
-    if (!name) {
-      this.favoritedEps = JSON.parse(localStorage.getItem('favoritos')) ?? [];
-      return;
-    }
+    this.favoritedEps = JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
     this.favoritedEps = this.favoritedEps.filter((ep) =>
       ep.name.includes(name)
+    );
+  }
+
+  favoriteFilterByForm(episode: Episode) {
+    this.favoritedEps = JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
+    this.favoritedEps = this.favoritedEps.filter((ep) =>
+      episode.episode
+        ? ep.episode.toLowerCase().includes(`s0${episode.episode}`)
+        : true && episode.name
+        ? ep.name.toLowerCase().includes(episode.name.toLowerCase())
+        : true
     );
   }
 
   reset() {
     this.form.reset();
     this.getInitialEpisodes();
+    this.favoritedEps = JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
   }
 
   redirectToEpisode(id: number) {
-    this.router.navigate([`episodio/${id}`]);
+    this.router.navigate([`detalhes/episodio/${id}`]);
   }
 
   back() {

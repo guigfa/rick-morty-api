@@ -22,7 +22,12 @@
       <hr />
     </ng-container>
     <div class="d-flex justify-content-center">
-      <button mat-raised-button color="primary" class="p-5 mb-5" (click)="checkResult()">
+      <button
+        mat-raised-button
+        color="primary"
+        class="p-5 mb-5"
+        (click)="checkResult()"
+      >
         Enviar!
       </button>
     </div>
@@ -33,16 +38,21 @@
       class="d-flex flex-column pt-5 justify-content-center align-items-center gap-3"
     >
       <span class="fs-2">Você acertou {{ count }} questões, parabéns!</span>
-      <img src="https://rickandmortyapi.com/api/character/avatar/24.jpeg" class="rounded-circle">
+      <img
+        src="https://rickandmortyapi.com/api/character/avatar/24.jpeg"
+        class="rounded-circle"
+      />
       <div class="d-flex gap-3">
         <button
           mat-raised-button
           color="primary"
-          (click)="resultPage = !resultPage"
+          (click)="resultPage = !resultPage; count = 0"
         >
           Tentar Novamente!
         </button>
-        <button mat-raised-button color="warn">Voltar</button>
+        <button mat-raised-button color="warn" (click)="redirectTo('')">
+          Voltar
+        </button>
       </div>
     </div>
   </ng-container>

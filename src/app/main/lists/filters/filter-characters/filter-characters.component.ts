@@ -115,6 +115,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
       gender: this.form.get('gender').value,
     };
     this.filter(character);
+    this.favoriteFilterByForm(character);
   }
 
   filter(character: Character) {
@@ -182,7 +183,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   }
 
   redirectToCharacter(id: number) {
-    this.router.navigate([`/personagem/${id}`]);
+    this.router.navigate([`detalhes/personagem/${id}`]);
   }
 
   back() {
@@ -191,6 +192,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
 
   reset() {
     this.form.reset();
+    this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
     this.getInitialCharacters();
   }
 
@@ -205,14 +207,22 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   }
 
   favoriteFilter(name: string) {
-    if (!name) {
-      this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
-      return;
-    }
+    this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
     this.favoritedChars = this.favoritedChars.filter((char) =>
       char.name.includes(name)
     );
-    console.log(this.favoritedChars)
+  }
+
+  favoriteFilterByForm(character: Character) {
+    this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
+    this.favoritedChars = this.favoritedChars.filter(
+      (char) =>
+        char.name.toLowerCase().includes(character.name.toLowerCase()) &&
+        char.gender
+          .toLowerCase()
+          .includes(character.gender.toLocaleLowerCase()) &&
+        char.status.toLowerCase().includes(character.status.toLocaleLowerCase())
+    );
   }
 
   setList(event: any) {

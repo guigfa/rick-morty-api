@@ -11,7 +11,7 @@
         (change)="setMode($event)"
       >
         <mat-button-toggle value="table"> Tabela </mat-button-toggle>
-        <mat-button-toggle value="card"> Card </mat-button-toggle>
+        <mat-button-toggle value="card"> Cards </mat-button-toggle>
       </mat-button-toggle-group>
       <mat-button-toggle-group
         value="Todos"
@@ -78,7 +78,13 @@
       Você não favoritou nenhum personagem!
     </div>
   </ng-container>
-  <ng-container *ngIf="modeToDisplay === 'table' && !error">
+  <ng-container
+    *ngIf="
+      modeToDisplay === 'table' &&
+      ((listToDisplay === 'Favoritos' && favoritedChars.length !== 0) ||
+        (listToDisplay === 'Todos' && dataSource.length !== 0))
+    "
+  >
     <mat-table
       [dataSource]="listToDisplay === 'Todos' ? dataSource : favoritedChars"
     >
@@ -192,7 +198,8 @@
                     [ngClass]="getStatus(character?.status)"
                   ></div>
                   <span class="subtitle"
-                    >{{ character?.status | statusPipe }} - {{ character?.species | speciePipe }}</span
+                    >{{ character?.status | statusPipe }} -
+                    {{ character?.species | speciePipe }}</span
                   >
                 </div>
                 <div class="d-flex flex-column">

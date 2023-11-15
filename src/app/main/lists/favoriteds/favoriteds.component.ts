@@ -51,7 +51,7 @@ export class FavoritedsComponent {
   }
 
   redirectTo(route: string) {
-    this.router.navigate([`${route}`]);
+    this.router.navigate([`filtrar/${route}`]);
   }
 
   getStatus(status: string) {

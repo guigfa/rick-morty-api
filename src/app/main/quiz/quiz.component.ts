@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { quizQuestions } from 'src/app/shared/mock-quiz/mock-quiz';
 import { FilterService } from 'src/app/shared/services/filter.service';
 
@@ -15,7 +16,7 @@ export class QuizComponent {
   count: number = 0;
   resultPage: boolean = false;
 
-  constructor(private filterService: FilterService) {
+  constructor(private filterService: FilterService, private router: Router) {
     this.filterService.sendListPage(false);
   }
 
@@ -43,5 +44,9 @@ export class QuizComponent {
 
   checkResult() {
     this.resultPage = true;
+  }
+
+  redirectTo(path: string) {
+    this.router.navigate([`${path}`]);
   }
 }

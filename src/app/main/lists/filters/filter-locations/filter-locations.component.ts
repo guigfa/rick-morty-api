@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Subscription, catchError } from 'rxjs';
 import { LocationRickMorty } from 'src/app/shared/models/Location.model';
 import { FilterService } from 'src/app/shared/services/filter.service';
@@ -39,8 +39,8 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     'dimension',
     'type',
     'favorited',
-    'redirect'
-  ]
+    'redirect',
+  ];
   controlURL: string;
 
   @HostListener('window:scroll', ['$event'])
@@ -69,7 +69,8 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     private rickMortyService: RickMortyService,
     private filterService: FilterService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -107,13 +108,14 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterByForm() {   
+  filterByForm() {
     const location: LocationRickMorty = {
       name: this.form.get('name').value,
       type: this.form.get('type').value ?? null,
       dimension: this.form.get('dimension').value ?? null,
     };
     this.filter(location);
+    this.favoriteFilterByForm(location);
   }
 
   filter(locations: LocationRickMorty) {
@@ -139,7 +141,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   }
 
   fetchPages(url: string) {
-    if(this.listToDisplay === 'Favoritos' || this.controlURL === url) return;
+    if (this.listToDisplay === 'Favoritos' || this.controlURL === url) return;
     this.controlURL = url;
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: LocationRickMorty) => {
@@ -157,7 +159,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     this.favoritedsIds.push(id);
     const location = this.locations.find((location) => location.id === id);
     this.favoritedLocations.push(location);
-    this.snackBar.open(`${location.name} favoritado!`, 'X', {duration: 1000});
+    this.snackBar.open(`${location.name} favoritado!`, 'X', { duration: 1000 });
     this.setLocalStorage();
   }
 
@@ -171,7 +173,9 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
       location.id !== id ? control.push(location) : ''
     );
     this.favoritedLocations = control;
-    this.snackBar.open(`${location.name} desfavoritado!`, 'X', {duration: 1000});
+    this.snackBar.open(`${location.name} desfavoritado!`, 'X', {
+      duration: 1000,
+    });
     this.setLocalStorage();
   }
 
@@ -189,6 +193,8 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   reset() {
     this.form.reset();
     this.getInitialLocations();
+    this.favoritedLocations =
+      JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
   }
 
   getStatus(status: string) {
@@ -200,25 +206,39 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
       return 'grey';
     }
   }
-  
+
   favoriteFilter(name: string) {
-    if(!name) {
-      this.favoritedLocations = JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
-      return
-    }
-    this.favoritedLocations = this.favoritedLocations.filter(location => location.name.includes(name));
-  };
-  
+    this.favoritedLocations =
+      JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
+    this.favoritedLocations = this.favoritedLocations.filter((location) =>
+      location.name.includes(name)
+    );
+  }
+
+  favoriteFilterByForm(location: LocationRickMorty) {
+    this.favoritedLocations =
+      JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
+    this.favoritedLocations = this.favoritedLocations.filter((loc) =>
+      location.name
+        ? loc.name.toLowerCase().includes(location.name.toLowerCase())
+        : true && location.dimension
+        ? loc.dimension.toLowerCase().includes(location.dimension.toLowerCase())
+        : true && location.type
+        ? loc.type.toLowerCase().includes(location.type.toLowerCase())
+        : true
+    );
+  }
+
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
   }
-  
+
   setMode(event: any) {
     this.modeToDisplay = event.value === 'table' ? 'table' : 'card';
   }
 
   redirectToLocation(id: number) {
-    this.router.navigate([`localizacao/${id}`]);
+    this.router.navigate([`detalhes/localizacao/${id}`]);
   }
 
   back() {
@@ -233,5 +253,4 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
         : ''
     );
   }
-
 }

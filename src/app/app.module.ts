@@ -25,6 +25,7 @@ import { TranslateGenderPipe } from './shared/pipes/translate-gender.pipe';
 import { PipeModule } from './shared/pipes/pipe.module';
 import { TranslateStatusPipe } from './shared/pipes/translate-status.pipe';
 import { TranslateSpeciePipe } from './shared/pipes/translate-specie.pipe';
+import { TranslateTypePipe } from './shared/pipes/translate-type.pipe';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { TranslateSpeciePipe } from './shared/pipes/translate-specie.pipe';
     FavoritedsComponent,
     TranslateGenderPipe,
     TranslateStatusPipe,
-    TranslateSpeciePipe
+    TranslateSpeciePipe,
+    TranslateTypePipe
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, catchError } from 'rxjs';
 import { FilterService } from 'src/app/shared/services/filter.service';
 import { RickMortyService } from 'src/app/shared/services/rick-morty.service';
@@ -25,7 +25,8 @@ export class FiltersComponent implements OnInit {
   constructor(
     private rickMortyService: RickMortyService,
     private filterService: FilterService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -99,7 +100,7 @@ export class FiltersComponent implements OnInit {
   }
 
   redirectTo(route: string) {
-    this.router.navigate([`${route}`]);
+    this.router.navigate([`${route}`], { relativeTo: this.activatedRoute });
   }
 
   getStatus(status: string) {

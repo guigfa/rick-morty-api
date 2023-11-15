@@ -60,7 +60,13 @@
       >
         Você não favoritou nenhuma localização!
       </ng-container>
-      <ng-container *ngIf="modeToDisplay === 'table'">
+      <ng-container
+        *ngIf="
+          modeToDisplay === 'table' &&
+          ((listToDisplay === 'Favoritos' && favoritedLocations.length !== 0) ||
+            (listToDisplay === 'Todos' && dataSource.length !== 0))
+        "
+      >
         <mat-table
           [dataSource]="
             listToDisplay === 'Todos' ? dataSource : favoritedLocations
@@ -90,7 +96,7 @@
               {{ "Tipo" }}
             </th>
             <td mat-cell *matCellDef="let row">
-              {{ row?.type }}
+              {{ row?.type | typePipe }}
             </td>
           </ng-container>
           <ng-container matColumnDef="favorited">
@@ -150,7 +156,7 @@
                   </div>
                   <div class="d-flex flex-column gap-1">
                     <span style="color: darkgray">Tipo:</span>
-                    <span>{{ location?.type }}</span>
+                    <span>{{ location?.type | typePipe }}</span>
                   </div>
                 </div>
                 <div class="d-flex flex-column justify-content-between p-2">

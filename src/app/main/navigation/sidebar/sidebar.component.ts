@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDrawerMode } from '@angular/material/sidenav';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/guard/auth-guard.service';
 import { FilterService } from 'src/app/shared/services/filter.service';
 
@@ -14,7 +14,7 @@ export class SidebarComponent implements OnInit {
   mode: string;
   login: boolean;
 
-  constructor(private router: Router, private filterService: FilterService, private authService: AuthService) {
+  constructor(private router: Router, private filterService: FilterService, private authService: AuthService, private activatedRoute: ActivatedRoute) {
     this.filterService.isListPage$.subscribe((val) => (this.isListPage = val));
   }
 

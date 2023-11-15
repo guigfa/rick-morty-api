@@ -54,11 +54,11 @@ export class DetailedEpisodeComponent {
   }
 
   redirectTo() {
-    this.router.navigate(['episodios']);
+    this.router.navigate(['filtrar/episodios']);
   }
 
   redirectToCharacter(id: number) {
-    this.router.navigate([`personagem/${id}`]);
+    this.router.navigate([`detalhes/personagem/${id}`]);
   }
 
   getStatus(status: string) {
