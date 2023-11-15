@@ -25,14 +25,21 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   handleNewValue: string;
   handlerSplitted: string[];
-  listToDisplay: string;
-  modeToDisplay: string;
+  listToDisplay: string = 'Todos';
+  modeToDisplay: string ='card';
   favoritedsIds: number[] =
     JSON.parse(localStorage.getItem('ids_favoritos_eps')) ?? [];
   favoritedEps: Episode[] =
     JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
   
   dataSource: Episode[] = [];
+  displayedColumns = [
+    'name',
+    'temp',
+    'airdate',
+    'favorited',
+    'redirect'
+  ]
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -107,6 +114,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
         catchError((error) => {
           this.error = true;
           this.episodes = [];
+          this.dataSource = [];
           this.nextPage = '';
           return EMPTY;
         })

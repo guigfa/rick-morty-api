@@ -16,14 +16,6 @@ export class ToolbarComponent implements OnInit {
     value: new FormControl('')
   });
 
-  filterParams: any[] = [
-    { value: 'name', label: 'Nome' },
-    { value: 'status', label: 'Status' },
-    { value: 'gender', label: 'Gênero' },
-    { value: 'origin', label: 'Origem' },
-    { value: 'name', label: 'Nome' },
-  ];
-
   constructor(private router: Router, private filterService: FilterService) {}
 
   ngOnInit(): void {
@@ -33,7 +25,6 @@ export class ToolbarComponent implements OnInit {
     this.form.valueChanges.subscribe(val => {
       this.filter(this.form.value)
     })
-    this.form.reset();
   }
 
   redirectTo(component: string) {
@@ -42,7 +33,6 @@ export class ToolbarComponent implements OnInit {
 
   filter(value: any) {
     value.query = 'name';    
-    if(!value.query) return;
     setTimeout(() => {
       this.filterService.setToolbarValue(`${value.query}:${value.value ?? ''}`)
     }, 300)

@@ -71,50 +71,118 @@
     >
       Você não favoritou nenhum episódio!
     </ng-container>
-    <ng-container
-      *ngFor="
-        let episode of listToDisplay === 'Todos' ? episodes : favoritedEps
-      "
-    >
-      <mat-card class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm episodes-card">
-        <div class="d-flex w-100">
-          <div class="d-flex justify-content-between w-100">
-            <div class="d-flex flex-column gap-3 column">
-              <span class="fs-3">{{ episode?.name }}</span>
-              <div class="d-flex flex-column justify-content-start gap-2">
-                <div class="d-flex flex-column gap-1">
-                  <span style="color: darkgray">Temporada:</span>
-                  <span>{{ episode?.episode }}</span>
-                </div>
-                <div class="d-flex flex-column gap-1">
-                  <span style="color: darkgray">Data:</span>
-                  <span>{{ episode?.air_date | date : "dd/MM/yy" }}</span>
+    <ng-container *ngIf="modeToDisplay === 'table'">
+      <mat-table
+        [dataSource]="listToDisplay === 'Todos' ? dataSource : favoritedEps"
+      >
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "Nome" }}
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row?.name }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="temp">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "Temporada" }}
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <div class="d-flex gap-1 align-items-center">
+              {{ row?.episode }}
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="airdate">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "Data" }}
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row?.air_date }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="favorited">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "Favoritar" }}
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-icon
+              (click)="favorited(row?.id)"
+              *ngIf="!favoritedsIds.includes(row?.id)"
+              >star_border</mat-icon
+            >
+            <mat-icon
+              class="rounded-circle p-12"
+              style="color: yellow"
+              (click)="unfavorited(row?.id)"
+              *ngIf="favoritedsIds.includes(row?.id)"
+              >star</mat-icon
+            >
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="redirect">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ "Redirecionar" }}
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-icon
+              style="color: white"
+              (click)="redirectToEpisode(row?.id)"
+              class="mr-20"
+              >add_circle_outline</mat-icon
+            >
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </mat-table>
+    </ng-container>
+    <ng-container *ngIf="modeToDisplay === 'card'">
+      <ng-container
+        *ngFor="
+          let episode of listToDisplay === 'Todos' ? episodes : favoritedEps
+        "
+      >
+        <mat-card class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm episodes-card">
+          <div class="d-flex w-100">
+            <div class="d-flex justify-content-between w-100">
+              <div class="d-flex flex-column gap-3 column">
+                <span class="fs-3">{{ episode?.name }}</span>
+                <div class="d-flex flex-column justify-content-start gap-2">
+                  <div class="d-flex flex-column gap-1">
+                    <span style="color: darkgray">Temporada:</span>
+                    <span>{{ episode?.episode }}</span>
+                  </div>
+                  <div class="d-flex flex-column gap-1">
+                    <span style="color: darkgray">Data:</span>
+                    <span>{{ episode?.air_date | date : "dd/MM/yy" }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="d-flex flex-column justify-content-between p-2">
-              <mat-icon
-                style="color: white"
-                (click)="redirectToEpisode(episode?.id)"
-                class="mr-20"
-                >add_circle_outline</mat-icon
-              >
-              <mat-icon
-                (click)="favorited(episode.id)"
-                *ngIf="!favoritedsIds.includes(episode?.id)"
-                >star_border</mat-icon
-              >
-              <mat-icon
-                class="rounded-circle p-12"
-                style="color: yellow"
-                (click)="unfavorited(episode.id)"
-                *ngIf="favoritedsIds.includes(episode?.id)"
-                >star</mat-icon
-              >
+              <div class="d-flex flex-column justify-content-between p-2">
+                <mat-icon
+                  style="color: white"
+                  (click)="redirectToEpisode(episode?.id)"
+                  class="mr-20"
+                  >add_circle_outline</mat-icon
+                >
+                <mat-icon
+                  (click)="favorited(episode.id)"
+                  *ngIf="!favoritedsIds.includes(episode?.id)"
+                  >star_border</mat-icon
+                >
+                <mat-icon
+                  class="rounded-circle p-12"
+                  style="color: yellow"
+                  (click)="unfavorited(episode.id)"
+                  *ngIf="favoritedsIds.includes(episode?.id)"
+                  >star</mat-icon
+                >
+              </div>
             </div>
           </div>
-        </div>
-      </mat-card>
+        </mat-card>
+      </ng-container>
     </ng-container>
   </div>
 

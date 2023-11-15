@@ -119,6 +119,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
           this.error = true;
           this.characters = [];
           this.nextPage = '';
+          this.dataSource = [];
           return EMPTY;
         })
       )

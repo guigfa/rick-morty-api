@@ -10,6 +10,8 @@ export class UserPageComponent {
   user: any = sessionStorage.getItem('user');
   name;
   image;
+  bio: string = localStorage.getItem('bio') ?? '';
+  edit: boolean = false;
 
   constructor(private filterService: FilterService) {
     const parse = JSON.parse(this.user);
@@ -17,4 +19,15 @@ export class UserPageComponent {
     this.image = parse.image;
     this.filterService.sendListPage(false);
   }
+
+  saveBio(bio: string) {
+    this.bio = bio;
+    localStorage.setItem('bio', bio);
+    this.edit = false;
+  }
+
+  handleEdit() {
+    this.edit = true;
+  }
+
 }

@@ -26,14 +26,21 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   handleNewValue: string;
   subscription: Subscription;
   handlerSplitted: string[];
-  listToDisplay: string;
-  modeToDisplay: string;
+  listToDisplay: string = 'Todos';
+  modeToDisplay: string = 'card';
   favoritedsIds: number[] =
     JSON.parse(localStorage.getItem('ids_favoritos_local')) ?? [];
   favoritedLocations: LocationRickMorty[] =
     JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
 
   dataSource: LocationRickMorty[] = [];
+  displayedColumns: string[] = [
+    'name',
+    'dimension',
+    'type',
+    'favorited',
+    'redirect'
+  ]
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -78,6 +85,10 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
           const location: LocationRickMorty = {
             [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
           };
+          if(this.listToDisplay === 'Favoritos') {
+            this.favoriteFilter(splitted[1].trim());
+            return;
+          }
           this.filter(location);
           this.handleNewValue = JSON.stringify(location);
         } else {
@@ -98,7 +109,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterByForm() {
+  filterByForm() {   
     const location: LocationRickMorty = {
       name: this.form.get('name').value,
       type: this.form.get('type').value ?? null,
@@ -116,6 +127,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
         catchError((error) => {
           this.error = true;
           this.locations = [];
+          this.dataSource = [];
           this.nextPage = '';
           return EMPTY;
         })
@@ -215,4 +227,9 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
         : ''
     );
   }
+
+  favoriteFilter(name: string) {
+    const locations = this.favoritedLocations.filter(location => location.name.includes(name))
+    console.log(locations)
+  };
 }
