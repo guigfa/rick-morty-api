@@ -8,15 +8,15 @@
         <span class="fs-1">{{ character?.name }}</span>
         <div class="d-flex align-items-baseline gap-2">
           <span class="fs-4">Espécie:</span>
-          <span class="subtitle">{{ character?.species }}</span>
+          <span class="subtitle">{{ character?.species | speciePipe }}</span>
         </div>
         <div class="d-flex align-items-baseline gap-2">
           <span class="fs-4">Estado:</span>
-          <span class="subtitle">{{ character?.status }}</span>
+          <span class="subtitle">{{ character?.status | statusPipe }}</span>
         </div>
         <div class="d-flex align-items-baseline gap-2">
           <span class="fs-4">Gênero:</span>
-          <span class="subtitle">{{ character?.gender }}</span>
+          <span class="subtitle">{{ character?.gender | genderPipe }}</span>
         </div>
       </div>
       <img [src]="character?.image" class="rounded-circle mb-20" />

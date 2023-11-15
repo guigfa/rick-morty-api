@@ -18,7 +18,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   nextPage: string;
   error: boolean = false;
   form: FormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
+    name: new FormControl(''),
     type: new FormControl(''),
     dimension: new FormControl(''),
   });
@@ -41,6 +41,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     'favorited',
     'redirect'
   ]
+  controlURL: string;
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -85,10 +86,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
           const location: LocationRickMorty = {
             [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
           };
-          if(this.listToDisplay === 'Favoritos') {
-            this.favoriteFilter(splitted[1].trim());
-            return;
-          }
+          this.favoriteFilter(splitted[1].trim());
           this.filter(location);
           this.handleNewValue = JSON.stringify(location);
         } else {
@@ -141,10 +139,10 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
   }
 
   fetchPages(url: string) {
-    if(this.listToDisplay === 'Favoritos') return;
+    if(this.listToDisplay === 'Favoritos' || this.controlURL === url) return;
+    this.controlURL = url;
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: LocationRickMorty) => {
-        if (this.locations.includes(result.name)) return;
         this.locations.push(result);
       });
       this.nextPage = data.info.next;
@@ -202,11 +200,19 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
       return 'grey';
     }
   }
-
+  
+  favoriteFilter(name: string) {
+    if(!name) {
+      this.favoritedLocations = JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
+      return
+    }
+    this.favoritedLocations = this.favoritedLocations.filter(location => location.name.includes(name));
+  };
+  
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
   }
-
+  
   setMode(event: any) {
     this.modeToDisplay = event.value === 'table' ? 'table' : 'card';
   }
@@ -228,8 +234,4 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     );
   }
 
-  favoriteFilter(name: string) {
-    const locations = this.favoritedLocations.filter(location => location.name.includes(name))
-    console.log(locations)
-  };
 }

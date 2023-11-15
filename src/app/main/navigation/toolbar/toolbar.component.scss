@@ -53,3 +53,23 @@ mat-list-item {
   background-color: red;
   font-size: 10px;
 }
+
+
+.form {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 5rem;
+  width: 100%;
+  font-size: large;
+}
+
+@media (max-width: 764px) {
+  .form {
+    display: flex;
+    flex-direction: column;
+    left: -140px;
+    gap: 0.3rem;
+    position: absolute;
+  }
+}

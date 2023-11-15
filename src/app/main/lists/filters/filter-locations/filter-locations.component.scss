@@ -49,3 +49,7 @@
       margin-bottom: 1rem;
     }
   }
+
+  .mat-column-name, .mat-column-dimension, .mat-column-type, .mat-column-favorited, .mat-column-redirect {
+    flex: 0 0 20%
+  }

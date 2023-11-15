@@ -24,24 +24,6 @@
   gap: 1rem;
 }
 
-mat-table {
-  border-radius: 8px;
-}
-
-tr {
-  display: flex;
-}
-
-th {
-  line-height: 2rem;
-  font-size: 20px;
-  line-height: 3rem;
-}
-
-td {
-  line-height: 2rem;
-}
-
 @media (max-width: 690px) {
   .main {
     display: flex;
@@ -86,7 +68,7 @@ td {
   }
   
   .mat-column-origin {
-    flex: 0 0 20%;
+    flex: 0 0 16%;
   }
 }
 

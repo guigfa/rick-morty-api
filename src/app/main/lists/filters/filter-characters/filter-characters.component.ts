@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -39,9 +45,10 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     'origin',
     'created',
     'favorited',
-    'redirect'
+    'redirect',
   ];
   dataSource: Character[] = [];
+  controlURL: string;
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -80,6 +87,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
           const character: Character = {
             [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
           };
+          this.favoriteFilter(splitted[1].trim());
           this.filter(character);
           this.handleNewValue = JSON.stringify(character);
         } else {
@@ -127,15 +135,15 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
         this.characters = [];
         data.results.forEach((result) => this.characters.push(result));
         this.nextPage = data.info.next;
-        this.dataSource = [...this.characters]
+        this.dataSource = [...this.characters];
       });
   }
 
   fetchPages(url: string) {
-    if(this.listToDisplay === 'Favoritos') return;
+    if (this.controlURL === url || this.listToDisplay === 'Favoritos') return;
+    this.controlURL = url;
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: Character) => {
-        if (this.characters.includes(result.name)) return;
         this.characters.push(result);
       });
       this.nextPage = data.info.next;
@@ -143,26 +151,28 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
         return;
       }
     });
-    this.dataSource = [...this.characters]
+    this.dataSource = [...this.characters];
   }
 
   favorited(id: number) {
     this.favoritedsIds.push(id);
     const character = this.characters.find((character) => character.id === id);
     this.favoritedChars.push(character);
-    this.snackBar.open(`${character.name} favoritado!`, 'X', {duration: 1000});
+    this.snackBar.open(`${character.name} favoritado!`, 'X', {
+      duration: 1000,
+    });
     this.setLocalStorage();
   }
 
   unfavorited(id: number) {
-    const char = this.favoritedChars.find((char) => char.id === id)
+    const char = this.favoritedChars.find((char) => char.id === id);
     this.favoritedsIds = this.favoritedsIds.filter((ids) => ids !== id);
     const control: any[] = [];
     this.favoritedChars.forEach((char) =>
       char.id !== id ? control.push(char) : ''
     );
     this.favoritedChars = control;
-    this.snackBar.open(`${char.name} desfavoritado!`, 'X', {duration: 1000});
+    this.snackBar.open(`${char.name} desfavoritado!`, 'X', { duration: 1000 });
     this.setLocalStorage();
   }
 
@@ -179,8 +189,8 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     this.router.navigate(['filtrar']);
   }
 
-  reset(){
-    this.form.reset(); 
+  reset() {
+    this.form.reset();
     this.getInitialCharacters();
   }
 
@@ -194,13 +204,24 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     }
   }
 
+  favoriteFilter(name: string) {
+    if (!name) {
+      this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
+      return;
+    }
+    this.favoritedChars = this.favoritedChars.filter((char) =>
+      char.name.includes(name)
+    );
+    console.log(this.favoritedChars)
+  }
+
   setList(event: any) {
     this.listToDisplay = event.value === 'Todos' ? 'Todos' : 'Favoritos';
   }
 
   setMode(event: any) {
     this.modeToDisplay = event.value === 'table' ? 'table' : 'card';
-  };
+  }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

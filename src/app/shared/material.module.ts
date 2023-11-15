@@ -56,7 +56,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { MatRadioModule } from '@angular/material/radio';
-import { PipeModule } from './pipes/pipe.module';
 
 const materialModules = [
   MatToolbarModule,
@@ -90,7 +89,7 @@ const materialModules = [
 @NgModule({
   declarations: [
   ],
-  imports: [CommonModule, ...materialModules, PipeModule],
+  imports: [CommonModule, ...materialModules],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }],
   exports: [...materialModules],
 })

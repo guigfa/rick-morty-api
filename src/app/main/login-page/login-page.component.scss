@@ -7,9 +7,12 @@ button {
 }
 
 .image-divs {
-    
     display: flex;
     gap: 3rem;
+}
+
+img {
+    cursor: pointer;
 }
 
 .selected {

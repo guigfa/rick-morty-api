@@ -65,6 +65,7 @@
           [dataSource]="
             listToDisplay === 'Todos' ? dataSource : favoritedLocations
           "
+          class="w-100"
         >
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>
@@ -80,7 +81,7 @@
             </th>
             <td mat-cell *matCellDef="let row">
               <div class="d-flex gap-1 align-items-center">
-                {{ row?.episode }}
+                {{ row?.dimension }}
               </div>
             </td>
           </ng-container>
@@ -89,7 +90,7 @@
               {{ "Tipo" }}
             </th>
             <td mat-cell *matCellDef="let row">
-              {{ row?.air_date }}
+              {{ row?.type }}
             </td>
           </ng-container>
           <ng-container matColumnDef="favorited">

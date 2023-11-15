@@ -26,20 +26,14 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   handleNewValue: string;
   handlerSplitted: string[];
   listToDisplay: string = 'Todos';
-  modeToDisplay: string ='card';
+  modeToDisplay: string = 'card';
   favoritedsIds: number[] =
     JSON.parse(localStorage.getItem('ids_favoritos_eps')) ?? [];
   favoritedEps: Episode[] =
     JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
-  
+  controlURL: string;
   dataSource: Episode[] = [];
-  displayedColumns = [
-    'name',
-    'temp',
-    'airdate',
-    'favorited',
-    'redirect'
-  ]
+  displayedColumns = ['name', 'temp', 'airdate', 'favorited', 'redirect'];
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -71,12 +65,15 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
     this.subscription = this.filterService
       .getToolbarValue()
       .subscribe((value) => {
+        this.favoritedEps =
+          JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
         if (value) {
           const splitted = value.split(':');
           this.handlerSplitted = splitted;
           const episode: Episode = {
             [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
           };
+          this.favoriteFilter(splitted[1].trim());
           this.filter(episode);
           this.handleNewValue = JSON.stringify(episode);
         } else {
@@ -128,10 +125,10 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   }
 
   fetchPages(url: string) {
-    if(this.listToDisplay === 'Favoritos') return;
+    if (url === this.controlURL || this.listToDisplay === 'Favoritos') return;
+    this.controlURL = url;
     this.rickMortyService.loadMoreData(url).subscribe((data: any) => {
       data.results.forEach((result: Episode) => {
-        if (this.episodes.includes(result.name)) return;
         this.episodes.push(result);
       });
       this.nextPage = data.info.next;
@@ -146,7 +143,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
     this.favoritedsIds.push(id);
     const episode = this.episodes.find((episode) => episode.id === id);
     this.favoritedEps.push(episode);
-    this.snackBar.open(`${episode.name} favoritado!`, 'X', {duration: 1000});
+    this.snackBar.open(`${episode.name} favoritado!`, 'X', { duration: 1000 });
     this.setLocalStorage();
   }
 
@@ -158,7 +155,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
       char.id !== id ? control.push(char) : ''
     );
     this.favoritedEps = control;
-    this.snackBar.open(`${ep.name} desfavoritado!`, 'X', {duration: 1000});
+    this.snackBar.open(`${ep.name} desfavoritado!`, 'X', { duration: 1000 });
     this.setLocalStorage();
   }
 
@@ -176,6 +173,16 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
 
   setMode(event: any) {
     this.modeToDisplay = event.value === 'table' ? 'table' : 'card';
+  }
+
+  favoriteFilter(name: string) {
+    if (!name) {
+      this.favoritedEps = JSON.parse(localStorage.getItem('favoritos')) ?? [];
+      return;
+    }
+    this.favoritedEps = this.favoritedEps.filter((ep) =>
+      ep.name.includes(name)
+    );
   }
 
   reset() {
