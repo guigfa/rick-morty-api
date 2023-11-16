@@ -203,7 +203,7 @@
       </ng-container>
     </div>
 
-    <ng-container *ngIf="error" class="">
+    <ng-container *ngIf="error || listToDisplay === 'Todos' ? episodes.length === 0 : dataSource.length === 0 ">
       <div class="text-center w-100">
         <span
           >Não foi encontrado nenhum episódio com essas características!</span

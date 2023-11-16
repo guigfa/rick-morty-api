@@ -234,7 +234,7 @@
     </div>
   </div>
 
-  <ng-container *ngIf="error">
+  <ng-container *ngIf="error || listToDisplay === 'Todos' ? characters.length === 0 : dataSource.length === 0 ">
     <div class="text-center w-100">
       <span
         >Não foi encontrado nenhum personagem com essas características!</span

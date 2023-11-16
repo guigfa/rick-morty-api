@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { FilterService } from 'src/app/shared/services/filter.service';
 
 @Component({
@@ -15,10 +16,16 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     query: new FormControl('name'),
     value: new FormControl('')
   });
+  subscription: Subscription
 
   constructor(private router: Router, private filterService: FilterService) {}
 
   ngOnInit(): void {
+    this.subscription = this.filterService.getToolbarValue().subscribe(val => {
+      const splitted = val?.split(':');
+      if(!val || !splitted[1].trim()) return;
+      this.form.get('value').setValue(val ?? '');
+    })
     this.filterService.isListPage$.subscribe((value) => {
       this.isListPage = value;
     });
@@ -30,8 +37,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   filter(value: any) {
     value.query = 'name';    
     setTimeout(() => {
-      this.filterService.setToolbarValue(`${value.query}:${value.value ?? ''}`)
-    }, 300)
+      this.filterService.setToolbarValue(`${value.query}:${value.value ?? ''}`);
+    }, 300);
+    this.subscription.unsubscribe();
   }
 
   redirectTo(component: string) {
@@ -40,6 +48,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void  {
+    const end = {
+      query: 'name',
+      value: ''
+    };
     this.form.reset();
+    this.filter(end);
   }
 }
