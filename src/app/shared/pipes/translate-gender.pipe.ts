@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TranslateGenderPipe implements PipeTransform {
   transform(value: string): string {
-    switch (value.toLowerCase()) {
+    switch (value?.toLowerCase()) {
       case 'male':
         return 'Homem';
       case 'female':

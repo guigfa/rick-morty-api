@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TranslateStatusPipe implements PipeTransform {
   transform(value: string): string {
-    switch (value.toLowerCase()) {
+    switch (value?.toLowerCase()) {
       case 'alive':
         return 'Vivo';
       case 'dead':

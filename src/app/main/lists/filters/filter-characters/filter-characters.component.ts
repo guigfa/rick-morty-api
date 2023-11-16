@@ -127,15 +127,15 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
     this.favoritedChars = this.favoritedChars.filter((char) =>
       character.name
-        ? char.name.toLowerCase().includes(character.name.toLowerCase())
+        ? char?.name?.toLowerCase().includes(character?.name?.toLowerCase())
         : true && character.gender
         ? char.gender
             .toLowerCase()
-            .includes(character.gender.toLocaleLowerCase())
+            .includes(character?.gender?.toLocaleLowerCase())
         : true && character.status
         ? char.status
             .toLowerCase()
-            .includes(character.status.toLocaleLowerCase())
+            .includes(character?.status?.toLocaleLowerCase())
         : true
     );
   }
@@ -220,9 +220,9 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   }
 
   getStatus(status: string) {
-    if (status.toLowerCase() === 'alive') {
+    if (status?.toLowerCase() === 'alive') {
       return 'green';
-    } else if (status.toLowerCase() === 'dead') {
+    } else if (status?.toLowerCase() === 'dead') {
       return 'red';
     } else {
       return 'grey';

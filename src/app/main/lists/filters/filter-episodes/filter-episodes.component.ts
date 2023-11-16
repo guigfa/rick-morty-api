@@ -109,9 +109,9 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
     this.favoritedEps = JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
     this.favoritedEps = this.favoritedEps.filter((ep) =>
       episode.episode
-        ? ep.episode.toLowerCase().includes(`s0${episode.episode}`)
+        ? ep?.episode?.toLowerCase().includes(`s0${episode?.episode}`)
         : true && episode.name
-        ? ep.name.toLowerCase().includes(episode.name.toLowerCase())
+        ? ep?.name?.toLowerCase().includes(episode?.name?.toLowerCase())
         : true
     );
   }

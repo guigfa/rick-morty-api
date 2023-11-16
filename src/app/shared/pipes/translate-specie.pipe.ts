@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TranslateSpeciePipe implements PipeTransform {
   transform(value: string): string {
-    switch (value.toLowerCase()) {
+    switch (value?.toLowerCase()) {
       case 'humanoid':
         return 'Humanoide';
       case 'human':

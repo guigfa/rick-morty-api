@@ -55,9 +55,9 @@ export class DetailedLocationComponent implements OnInit {
   }
 
   getStatus(status: string) {
-    if (status.toLowerCase() === 'alive') {
+    if (status?.toLowerCase() === 'alive') {
       return 'green';
-    } else if (status.toLowerCase() === 'dead') {
+    } else if (status?.toLowerCase() === 'dead') {
       return 'red';
     } else {
       return 'grey';

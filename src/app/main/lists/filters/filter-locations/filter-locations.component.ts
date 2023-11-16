@@ -122,11 +122,11 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
       JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
     this.favoritedLocations = this.favoritedLocations.filter((loc) =>
       location.name
-        ? loc.name.toLowerCase().includes(location.name.toLowerCase())
+        ? loc?.name?.toLowerCase().includes(location?.name?.toLowerCase())
         : true && location.dimension
-        ? loc.dimension.toLowerCase().includes(location.dimension.toLowerCase())
+        ? loc?.dimension?.toLowerCase().includes(location?.dimension?.toLowerCase())
         : true && location.type
-        ? loc.type.toLowerCase().includes(location.type.toLowerCase())
+        ? loc?.type?.toLowerCase().includes(location?.type?.toLowerCase())
         : true
     );
   }
