@@ -81,6 +81,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     this.subscription = this.filterService
       .getToolbarValue()
       .subscribe((value) => {
+        this.form.reset();
         if (value) {
           const splitted = value.split(':');
           this.handlerSplitted = splitted;

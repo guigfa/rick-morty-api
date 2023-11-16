@@ -73,7 +73,8 @@ export class LoginPageComponent implements OnInit {
     }
   }
 
-  send() {
+  send(event: any) {
+    event.preventDefault();
     if (this.authService.authenticate(this.name, this.image)) {
       this.router.navigate(['inicio']);
     }

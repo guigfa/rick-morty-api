@@ -38,9 +38,15 @@ mat-list-item {
 
 .toolbar {
   position: absolute;
-  z-index: 100;
+  z-index: 999999999;
   top: 0;
   left: 50%;
   width: 50%;
   background: transparent;
+}
+
+@media (max-width: 764px) {
+  .toolbar {
+    left: 60%
+  }
 }

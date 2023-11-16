@@ -29,6 +29,10 @@
   }
   
   @media (max-width: 690px) {
+    .container {
+    margin-top: 17rem;
+    }
+
     .main {
       display: flex;
       flex-direction: column;

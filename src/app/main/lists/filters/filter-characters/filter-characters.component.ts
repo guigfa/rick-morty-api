@@ -28,9 +28,9 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   nextPage: string;
   form: FormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    status: new FormControl('', [Validators.required]),
-    gender: new FormControl('', [Validators.required]),
+    name: new FormControl(''),
+    status: new FormControl(''),
+    gender: new FormControl(''),
   });
   filterValue: string;
   handleNewValue: string;
@@ -81,6 +81,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     this.subscription = this.filterService
       .getToolbarValue()
       .subscribe((value) => {
+        this.form.reset();
         if (value) {
           const splitted = value.split(':');
           this.handlerSplitted = splitted;
@@ -217,13 +218,18 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   favoriteFilterByForm(character: Character) {
     this.error = false;
     this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
-    this.favoritedChars = this.favoritedChars.filter(
-      (char) =>
-        char.name.toLowerCase().includes(character.name.toLowerCase()) &&
-        char.gender
-          .toLowerCase()
-          .includes(character.gender.toLocaleLowerCase()) &&
-        char.status.toLowerCase().includes(character.status.toLocaleLowerCase())
+    this.favoritedChars = this.favoritedChars.filter((char) =>
+      character.name
+        ? char.name.toLowerCase().includes(character.name.toLowerCase())
+        : true && character.gender
+        ? char.gender
+            .toLowerCase()
+            .includes(character.gender.toLocaleLowerCase())
+        : true && character.status
+        ? char.status
+            .toLowerCase()
+            .includes(character.status.toLocaleLowerCase())
+        : true
     );
   }
 

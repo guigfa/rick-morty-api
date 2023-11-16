@@ -65,8 +65,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
     this.subscription = this.filterService
       .getToolbarValue()
       .subscribe((value) => {
-        this.favoritedEps =
-          JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
+        this.form.reset();
         if (value) {
           const splitted = value.split(':');
           this.handlerSplitted = splitted;

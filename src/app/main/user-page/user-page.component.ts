@@ -10,7 +10,7 @@ export class UserPageComponent {
   user: any = sessionStorage.getItem('user');
   name;
   image;
-  bio: string = localStorage.getItem('bio') ?? '';
+  bio: string = localStorage.getItem('bio') ?? 'Digite aqui sua nova bio, esta é padrão da aplicação!';
   edit: boolean = false;
 
   constructor(private filterService: FilterService) {
