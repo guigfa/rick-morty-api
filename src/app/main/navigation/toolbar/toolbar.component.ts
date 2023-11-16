@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FilterService } from 'src/app/shared/services/filter.service';
@@ -8,7 +8,7 @@ import { FilterService } from 'src/app/shared/services/filter.service';
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnInit, OnDestroy {
   showFiller: boolean = true;
   isListPage: boolean = false;
   form: FormGroup = new FormGroup({
@@ -27,14 +27,19 @@ export class ToolbarComponent implements OnInit {
     })
   }
 
-  redirectTo(component: string) {
-    this.router.navigate([`${component}`]);
-  }
-
   filter(value: any) {
     value.query = 'name';    
     setTimeout(() => {
       this.filterService.setToolbarValue(`${value.query}:${value.value ?? ''}`)
     }, 300)
+  }
+
+  redirectTo(component: string) {
+    this.router.navigate([`${component}`]);
+  }
+
+
+  ngOnDestroy(): void  {
+    this.form.reset();
   }
 }

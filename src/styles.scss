@@ -118,3 +118,9 @@ th {
 td {
   line-height: 2rem;
 }
+
+@media (max-width: 764px) {
+  body {
+    overflow-x: hidden;
+  }
+}

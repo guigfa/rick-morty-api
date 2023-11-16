@@ -16,9 +16,13 @@ mat-icon {
   align-items: start;
 }
 
-@media (max-width: 690px) {
+@media (max-width: 764px) {
   .main {
     display: flex;
     flex-direction: column;
+  }
+
+  mat-card {
+    width: 100%;
   }
 }

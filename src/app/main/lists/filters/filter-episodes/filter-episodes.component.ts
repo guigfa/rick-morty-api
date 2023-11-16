@@ -15,15 +15,8 @@ import { RickMortyService } from 'src/app/shared/services/rick-morty.service';
 export class FilterEpisodesComponent implements OnInit, OnDestroy {
   episodes: any[] = [];
   nextPage: string;
-  loading: boolean = false;
   error: boolean = false;
-  filterValue: string;
-  form: FormGroup = new FormGroup({
-    name: new FormControl(null),
-    episode: new FormControl(null),
-  });
   subscription: Subscription;
-  handleNewValue: string;
   handlerSplitted: string[];
   listToDisplay: string = 'Todos';
   modeToDisplay: string = 'card';
@@ -32,8 +25,12 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
   favoritedEps: Episode[] =
     JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
   controlURL: string;
-  dataSource: Episode[] = [];
   displayedColumns = ['name', 'temp', 'airdate', 'favorited', 'redirect'];
+  dataSource: Episode[] = [];
+  form: FormGroup = new FormGroup({
+    name: new FormControl(null),
+    episode: new FormControl(null),
+  });
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -45,7 +42,6 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
 
     if (scrollY + windowHeight >= documentHeight - margin) {
       if (!this.nextPage) return;
-      this.loading = true;
       this.fetchPages(this.nextPage), { eventEmitter: false };
     }
   }
@@ -73,8 +69,7 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
             [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
           };
           this.favoriteFilter(splitted[1].trim());
-          this.filter(episode);
-          this.handleNewValue = JSON.stringify(episode);
+          this.allFilter(episode);
         } else {
           this.getInitialEpisodes();
         }
@@ -98,11 +93,30 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
       name: this.form.get('name').value,
       episode: this.form.get('episode').value,
     };
-    this.filter(episode);
+    this.allFilter(episode);
     this.favoriteFilterByForm(episode);
   }
 
-  filter(episodes: Episode) {
+  favoriteFilter(name: string) {
+    this.favoritedEps = JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
+    this.favoritedEps = this.favoritedEps.filter((ep) =>
+      ep.name.includes(name)
+    );
+  }
+
+  favoriteFilterByForm(episode: Episode) {
+    this.error = false;
+    this.favoritedEps = JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
+    this.favoritedEps = this.favoritedEps.filter((ep) =>
+      episode.episode
+        ? ep.episode.toLowerCase().includes(`s0${episode.episode}`)
+        : true && episode.name
+        ? ep.name.toLowerCase().includes(episode.name.toLowerCase())
+        : true
+    );
+  }
+
+  allFilter(episodes: Episode) {
     this.error = false;
     this.episodes = [];
     this.rickMortyService
@@ -173,25 +187,6 @@ export class FilterEpisodesComponent implements OnInit, OnDestroy {
 
   setMode(event: any) {
     this.modeToDisplay = event.value === 'table' ? 'table' : 'card';
-  }
-
-  favoriteFilter(name: string) {
-    this.favoritedEps = JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
-    this.favoritedEps = this.favoritedEps.filter((ep) =>
-      ep.name.includes(name)
-    );
-  }
-
-  favoriteFilterByForm(episode: Episode) {
-    this.error = false;
-    this.favoritedEps = JSON.parse(localStorage.getItem('favoritos_eps')) ?? [];
-    this.favoritedEps = this.favoritedEps.filter((ep) =>
-      episode.episode
-        ? ep.episode.toLowerCase().includes(`s0${episode.episode}`)
-        : true && episode.name
-        ? ep.name.toLowerCase().includes(episode.name.toLowerCase())
-        : true
-    );
   }
 
   reset() {

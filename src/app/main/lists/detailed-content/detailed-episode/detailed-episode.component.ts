@@ -53,14 +53,6 @@ export class DetailedEpisodeComponent {
     }
   }
 
-  redirectTo() {
-    this.router.navigate(['filtrar/episodios']);
-  }
-
-  redirectToCharacter(id: number) {
-    this.router.navigate([`detalhes/personagem/${id}`]);
-  }
-
   getStatus(status: string) {
     if (status.toLowerCase() === 'alive') {
       return 'green';
@@ -69,6 +61,14 @@ export class DetailedEpisodeComponent {
     } else {
       return 'grey';
     }
+  }
+
+  redirectTo() {
+    this.router.navigate(['filtrar/episodios']);
+  }
+
+  redirectToCharacter(id: number) {
+    this.router.navigate([`detalhes/personagem/${id}`]);
   }
 
   get charactersList() {

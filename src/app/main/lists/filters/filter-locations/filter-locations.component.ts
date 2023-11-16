@@ -13,17 +13,10 @@ import { RickMortyService } from 'src/app/shared/services/rick-morty.service';
   styleUrls: ['./filter-locations.component.scss'],
 })
 export class FilterLocationsComponent implements OnInit, OnDestroy {
-  isFetching: boolean = false;
   locations: any[] = [];
   nextPage: string;
   error: boolean = false;
-  form: FormGroup = new FormGroup({
-    name: new FormControl(''),
-    type: new FormControl(''),
-    dimension: new FormControl(''),
-  });
   filterValue: string;
-  handleNewValue: string;
   subscription: Subscription;
   handlerSplitted: string[];
   listToDisplay: string = 'Todos';
@@ -42,6 +35,11 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     'redirect',
   ];
   controlURL: string;
+  form: FormGroup = new FormGroup({
+    name: new FormControl(''),
+    type: new FormControl(''),
+    dimension: new FormControl(''),
+  });
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -52,16 +50,8 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     const margin = 300;
 
     if (scrollY + windowHeight >= documentHeight - margin) {
-      if (!this.nextPage || this.isFetching) return;
-
-      this.isFetching = true;
-
-      new Promise<void>((resolve) => {
-        this.fetchPages(this.nextPage);
-        resolve(); // Resolve the Promise immediately
-      }).then(() => {
-        this.isFetching = false;
-      });
+      if (!this.nextPage) return;
+      this.fetchPages(this.nextPage), { eventEmitter: false };
     }
   }
 
@@ -89,8 +79,7 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
             [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
           };
           this.favoriteFilter(splitted[1].trim());
-          this.filter(location);
-          this.handleNewValue = JSON.stringify(location);
+          this.allFilter(location);
         } else {
           this.getInitialLocations();
         }
@@ -115,11 +104,34 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
       type: this.form.get('type').value ?? null,
       dimension: this.form.get('dimension').value ?? null,
     };
-    this.filter(location);
+    this.allFilter(location);
     this.favoriteFilterByForm(location);
   }
 
-  filter(locations: LocationRickMorty) {
+  favoriteFilter(name: string) {
+    this.favoritedLocations =
+      JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
+    this.favoritedLocations = this.favoritedLocations.filter((location) =>
+      location.name.includes(name)
+    );
+  }
+
+  favoriteFilterByForm(location: LocationRickMorty) {
+    this.error = false;
+    this.favoritedLocations =
+      JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
+    this.favoritedLocations = this.favoritedLocations.filter((loc) =>
+      location.name
+        ? loc.name.toLowerCase().includes(location.name.toLowerCase())
+        : true && location.dimension
+        ? loc.dimension.toLowerCase().includes(location.dimension.toLowerCase())
+        : true && location.type
+        ? loc.type.toLowerCase().includes(location.type.toLowerCase())
+        : true
+    );
+  }
+
+  allFilter(locations: LocationRickMorty) {
     this.error = false;
     this.locations = [];
     this.rickMortyService
@@ -196,39 +208,6 @@ export class FilterLocationsComponent implements OnInit, OnDestroy {
     this.getInitialLocations();
     this.favoritedLocations =
       JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
-  }
-
-  getStatus(status: string) {
-    if (status.toLowerCase() === 'alive') {
-      return 'green';
-    } else if (status.toLowerCase() === 'dead') {
-      return 'red';
-    } else {
-      return 'grey';
-    }
-  }
-
-  favoriteFilter(name: string) {
-    this.favoritedLocations =
-      JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
-    this.favoritedLocations = this.favoritedLocations.filter((location) =>
-      location.name.includes(name)
-    );
-  }
-
-  favoriteFilterByForm(location: LocationRickMorty) {
-    this.error = false;
-    this.favoritedLocations =
-      JSON.parse(localStorage.getItem('favoritos_local')) ?? [];
-    this.favoritedLocations = this.favoritedLocations.filter((loc) =>
-      location.name
-        ? loc.name.toLowerCase().includes(location.name.toLowerCase())
-        : true && location.dimension
-        ? loc.dimension.toLowerCase().includes(location.dimension.toLowerCase())
-        : true && location.type
-        ? loc.type.toLowerCase().includes(location.type.toLowerCase())
-        : true
-    );
   }
 
   setList(event: any) {

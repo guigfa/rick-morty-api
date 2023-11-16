@@ -6,3 +6,15 @@
   color: black !important;
   background-color: white !important;
 }
+
+
+.quiz {
+  margin: 0 auto;
+  width: 50%;
+}
+
+@media (max-width: 764px) {
+  .quiz {
+    width: 100%;
+  }
+}

@@ -90,19 +90,6 @@ export class FiltersComponent implements OnInit {
       .subscribe((data) => (this.locations = data.results));
   }
 
-  reset() {
-    this.getInfos();
-    this.form.reset();
-  }
-
-  back() {
-    this.router.navigate(['inicio']);
-  }
-
-  redirectTo(route: string) {
-    this.router.navigate([`${route}`], { relativeTo: this.activatedRoute });
-  }
-
   getStatus(status: string) {
     if (status.toLowerCase() === 'alive') {
       return 'green';
@@ -111,5 +98,18 @@ export class FiltersComponent implements OnInit {
     } else {
       return 'grey';
     }
+  }
+
+  reset() {
+    this.getInfos();
+    this.form.reset();
+  }
+
+  redirectTo(route: string) {
+    this.router.navigate([`${route}`], { relativeTo: this.activatedRoute });
+  }
+  
+  back() {
+    this.router.navigate(['inicio']);
   }
 }

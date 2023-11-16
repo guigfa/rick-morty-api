@@ -25,15 +25,8 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   favoritedChars: Character[] =
     JSON.parse(localStorage.getItem('favoritos')) ?? [];
   error: boolean = false;
-  loading: boolean = false;
   nextPage: string;
-  form: FormGroup = new FormGroup({
-    name: new FormControl(''),
-    status: new FormControl(''),
-    gender: new FormControl(''),
-  });
   filterValue: string;
-  handleNewValue: string;
   subscription: Subscription;
   handlerSplitted: string[];
   listToDisplay: string = 'Todos';
@@ -49,6 +42,11 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
   ];
   dataSource: Character[] = [];
   controlURL: string;
+  form: FormGroup = new FormGroup({
+    name: new FormControl(''),
+    status: new FormControl(''),
+    gender: new FormControl(''),
+  });
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -60,7 +58,6 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
 
     if (scrollY + windowHeight >= documentHeight - margin) {
       if (!this.nextPage) return;
-      this.loading = true;
       this.fetchPages(this.nextPage), { eventEmitter: false };
     }
   }
@@ -89,8 +86,7 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
             [splitted[0].trim() ?? '']: splitted[1].trim() ?? '',
           };
           this.favoriteFilter(splitted[1].trim());
-          this.filter(character);
-          this.handleNewValue = JSON.stringify(character);
+          this.allFilter(character);
         } else {
           this.getInitialCharacters();
         }
@@ -115,11 +111,36 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
       status: this.form.get('status').value,
       gender: this.form.get('gender').value,
     };
-    this.filter(character);
+    this.allFilter(character);
     this.favoriteFilterByForm(character);
   }
 
-  filter(character: Character) {
+  favoriteFilter(name: string) {
+    this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
+    this.favoritedChars = this.favoritedChars.filter((char) =>
+      char.name.includes(name)
+    );
+  }
+
+  favoriteFilterByForm(character: Character) {
+    this.error = false;
+    this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
+    this.favoritedChars = this.favoritedChars.filter((char) =>
+      character.name
+        ? char.name.toLowerCase().includes(character.name.toLowerCase())
+        : true && character.gender
+        ? char.gender
+            .toLowerCase()
+            .includes(character.gender.toLocaleLowerCase())
+        : true && character.status
+        ? char.status
+            .toLowerCase()
+            .includes(character.status.toLocaleLowerCase())
+        : true
+    );
+  }
+
+  allFilter(character: Character) {
     this.error = false;
     this.characters = [];
     this.rickMortyService
@@ -206,31 +227,6 @@ export class FilterCharactersComponent implements OnInit, OnDestroy {
     } else {
       return 'grey';
     }
-  }
-
-  favoriteFilter(name: string) {
-    this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
-    this.favoritedChars = this.favoritedChars.filter((char) =>
-      char.name.includes(name)
-    );
-  }
-
-  favoriteFilterByForm(character: Character) {
-    this.error = false;
-    this.favoritedChars = JSON.parse(localStorage.getItem('favoritos')) ?? [];
-    this.favoritedChars = this.favoritedChars.filter((char) =>
-      character.name
-        ? char.name.toLowerCase().includes(character.name.toLowerCase())
-        : true && character.gender
-        ? char.gender
-            .toLowerCase()
-            .includes(character.gender.toLocaleLowerCase())
-        : true && character.status
-        ? char.status
-            .toLowerCase()
-            .includes(character.status.toLocaleLowerCase())
-        : true
-    );
   }
 
   setList(event: any) {

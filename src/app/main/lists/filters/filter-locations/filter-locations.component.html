@@ -34,6 +34,14 @@
             <mat-label>Nome</mat-label>
             <input appaerance="outline" matInput formControlName="name" />
           </mat-form-field>
+          <mat-form-field>
+            <mat-label>Tipo</mat-label>
+            <input appaerance="outline" matInput formControlName="type" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Dimensão</mat-label>
+            <input appaerance="outline" matInput formControlName="dimension" />
+          </mat-form-field>
           <button
             mat-raised-button
             color="primary"
@@ -144,7 +152,17 @@
           "
         >
           <mat-card
-            class="col-4 col-sm-4 col-md-5 p-0 h-25 col-sm characters-card"
+            [ngClass]="{
+              'col-4 col-sm-4 col-md-5':
+                (listToDisplay === 'Todos' && locations.length > 1) ||
+                (listToDisplay === 'Favoritos' &&
+                  favoritedLocations.length > 1),
+              '':
+                (listToDisplay === 'Todos' && locations.length <= 1) ||
+                (listToDisplay === 'Favoritos' &&
+                  favoritedLocations.length <= 1)
+            }"
+            class="p-0 h-25 col-sm characters-card"
           >
             <div class="d-flex w-100">
               <div class="d-flex justify-content-between w-100">

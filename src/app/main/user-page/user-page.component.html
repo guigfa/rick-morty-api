@@ -1,35 +1,58 @@
 <div class="container main">
-  <mat-card class="w-50 h-50 p-5 d-flex gap-5 flex-column">
-    <div class="d-flex flex-column gap-3">
-      <span class="fs-1">BIO:</span>
-      <span class="fs-5">{{ bio }}</span>
-    </div>
-    <div class="d-flex flex-column gap-3 align-items-center align-items-center justify-content-center">
-      <button [disabled]="edit" mat-raised-button color="primary" (click)="handleEdit()">Editar</button>
-      <div *ngIf="edit" class="d-flex justify-content-center gap-3 ">
-        <input 
-          class="w-100"
-          matInput
-          #input
-          placeholder="Digite sua nova bio."
+  <div class="d-flex flex-column align-items-center gap-5 w-100">
+    <span class="fs-1">Usuário</span>
+    <div class="d-flex justify-content-around align-items-center w-100">
+      <mat-card class="w-50 h-50 p-5 d-flex gap-5 flex-column">
+        <div class="d-flex flex-column gap-3" style="line-break: anywhere">
+          <span class="fs-1">BIO:</span>
+          <span class="fs-5">{{ bio }}</span>
+        </div>
+        <div
+          class="d-flex flex-column gap-3 align-items-center align-items-center justify-content-center"
         >
-        <button mat-raised-button color="primary" (click)="saveBio(input.value)">Salvar</button>
+          <button
+            [disabled]="edit"
+            mat-raised-button
+            color="primary"
+            (click)="handleEdit()"
+          >
+            Editar
+          </button>
+          <div *ngIf="edit" class="d-flex justify-content-center gap-3">
+            <input
+              class="w-100"
+              appaerence="outline"
+              matInput
+              #input
+              placeholder="Digite sua nova bio."
+            />
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="saveBio(input.value)"
+            >
+              Salvar
+            </button>
+          </div>
+        </div>
+      </mat-card>
+
+      <div
+        class="d-flex flex-column align-items-end justify-content-center gap-5"
+      >
+        <mat-card class="p-5">
+          <div
+            class="d-flex flex-column gap-3 align-items-center ustify-content-center"
+          >
+            <img
+              [src]="image"
+              class="rounded-circle"
+              style="height: 200px; width: 200px"
+            />
+            <span class="fs-1">{{ name }}</span>
+          </div>
+        </mat-card>
       </div>
     </div>
-  </mat-card>
-
-  <div class="d-flex flex-column align-items-end justify-content-center gap-5">
-    <mat-card class="p-5">
-      <div
-        class="d-flex flex-column gap-3 align-items-center ustify-content-center"
-      >
-        <img
-          [src]="image"
-          class="rounded-circle"
-          style="height: 200px; width: 200px"
-        />
-        <span class="fs-1">{{ name }}</span>
-      </div>
-    </mat-card>
   </div>
 </div>
